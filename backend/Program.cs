@@ -1,11 +1,54 @@
+using backend.Data;
+using backend.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+#region SERVICES
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+/*
+builder.Services.AddAuthentication(x =>
+{
+	x.DefaultAuthenticateScheme =
+	x.DefaultChallengeScheme =
+	x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(y =>
+{
+	y.SaveToken = false;
+	y.TokenValidationParameters = new TokenValidationParameters
+	{
+		ValidateIssuerSigningKey = true,
+		ValidateAudience = false,
+		ValidateIssuer = false,
+		ValidateLifetime = true,
+		IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["AppSettings:JWTSecret"]!))
+	};
+});
+*/
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+	options.Password.RequireNonAlphanumeric = false;
+	options.Password.RequireUppercase = false;
+	options.Password.RequiredLength = 0;
+	options.Password.RequireUppercase = false;
+	options.Password.RequireLowercase = false;
+	options.Password.RequireDigit = false;
+	options.User.RequireUniqueEmail = true;
+});
+
+builder.Services
+	.AddIdentityApiEndpoints<AppUser>()
+	.AddEntityFrameworkStores<EMSContext>();
+
+builder.Services.AddDbContext<EMSContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+#endregion
 
 var app = builder.Build();
 

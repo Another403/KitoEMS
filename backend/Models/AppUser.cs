@@ -8,7 +8,6 @@ public class AppUser : IdentityUser
 	[PersonalData]
 	[Column(TypeName = "nvarchar(150)")]
 	public string FullName { get; set; } = null!;
-	public string Username { get; set; } = null!;
 	public string? RefreshToken { get; set; }
 	public DateTime RefreshTokenExpiry { get; set; }
 	public bool isAdmin { get; set; } = false;
