@@ -12,7 +12,7 @@ api.interceptors.response.use(
 			refreshing = true;
 			try {
 				const refreshToken = localStorage.getItem("refreshToken");
-				const res = await axios.post(`https://localhost:7014/api/AppUsers/refreshToken/${refreshToken}`);
+				const res = await axios.post(`https://localhost:7014/api/AppUsers/refreshToken`, {refreshToken});
 				localStorage.setItem('token', res.data.token);
 				refreshing = false;
 

@@ -90,14 +90,14 @@
   {
     "ContainingType": "backend.Controllers.AppUsersController",
     "Method": "RefreshToken",
-    "RelativePath": "api/AppUsers/refreshToken/{refreshToken}",
+    "RelativePath": "api/AppUsers/refreshToken",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "refreshToken",
-        "Type": "System.String",
+        "Name": "refreshTokenModel",
+        "Type": "backend.Models.RefreshTokenModel",
         "IsRequired": true
       }
     ],

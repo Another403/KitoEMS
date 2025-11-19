@@ -130,10 +130,10 @@ public class AppUsersController : Controller
 		}
 	}
 
-	[HttpPost("refreshToken/{refreshToken}")]
-	public async Task<IActionResult> RefreshToken(string refreshToken)
+	[HttpPost("refreshToken")]
+	public async Task<IActionResult> RefreshToken([FromBody] RefreshTokenModel refreshTokenModel)
 	{
-		var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshToken);
+		var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshTokenModel.RefreshToken);
 
 		if (user == null || user.RefreshTokenExpiry <= DateTime.UtcNow) 
 		{ 
@@ -158,7 +158,7 @@ public class AppUsersController : Controller
 		var securityToken = tokenHandler.CreateToken(tokenDescriptor);
 		var token = tokenHandler.WriteToken(securityToken);
 
-		return Ok(new { token, refreshToken });
+		return Ok(new { token });
 	}
 
 	[HttpDelete("all")]

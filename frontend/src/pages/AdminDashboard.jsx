@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from '../contexts/authContext.jsx';
 
-import AdminSidebar from '../components/AdminSidebar.jsx';
-import Navbar from '../components/Navbar.jsx';
+import AdminSidebar from '../components/dashboard/AdminSidebar.jsx';
+import Navbar from '../components/dashboard/Navbar.jsx';
+import AdminSummary from '../components/dashboard/AdminSummary.jsx';
 
 const AdminDashboard = () => {
 	const { user } = useAuth();
@@ -20,8 +21,9 @@ const AdminDashboard = () => {
 	return (
 		<div className='flex'>
 			<AdminSidebar/>
-			<div className='flex-1 ml-64'>
+			<div className='flex-1 ml-64 bg-gray-100 h-screen'>
 				<Navbar/>
+				<Outlet/>
 			</div>
 		</div>
 	)

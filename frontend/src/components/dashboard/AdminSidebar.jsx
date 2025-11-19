@@ -12,7 +12,8 @@ const AdminSidebar = () => {
 			</div>
 			<div className='px-4'>
 				<NavLink to='/admin-dashboard'
-					className='flex items-center space-x-4 block py-2.5 px-4 rounded'>
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}
+					end>
 					<FaTachometerAlt/>
 					<span>Dashboard</span>
 				</NavLink>
@@ -26,8 +27,8 @@ const AdminSidebar = () => {
 					<FaInfo/>
 					<span>Reports</span>
 				</NavLink>
-				<NavLink to='/admin-dashboard'
-					className='flex items-center space-x-4 block py-2.5 px-4 rounded'>
+				<NavLink to='/admin-dashboard/storage'
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaLayerGroup/>
 					<span>Storage</span>
 				</NavLink>
