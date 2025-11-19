@@ -44,7 +44,7 @@ const Login = () => {
 		<div className="flex flex-col items-center h-screen justify-center
 						bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6">
 			<h2 className="font-pacifico text-3xl text-white">
-				Kito - Employee Management System
+				Kito - Enterprise Resource Planning
 			</h2>
 			<div className="border shadow p-6 w-80 bg-white">
 				<h2 className="text-2xl font-bold mb-4">
