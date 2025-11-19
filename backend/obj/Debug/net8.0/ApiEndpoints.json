@@ -47,8 +47,66 @@
   },
   {
     "ContainingType": "backend.Controllers.AppUsersController",
+    "Method": "DeleteUserFromList",
+    "RelativePath": "api/AppUsers/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.AppUsersController",
+    "Method": "DeleteAllUsers",
+    "RelativePath": "api/AppUsers/all",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.AppUsersController",
+    "Method": "UserLogin",
+    "RelativePath": "api/AppUsers/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "loginForm",
+        "Type": "backend.Models.LoginForm",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.AppUsersController",
+    "Method": "RefreshToken",
+    "RelativePath": "api/AppUsers/refreshToken/{refreshToken}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "refreshToken",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.AppUsersController",
     "Method": "UserRegister",
-    "RelativePath": "register",
+    "RelativePath": "api/AppUsers/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -59,6 +117,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.AppUsersController",
+    "Method": "VerifyUser",
+    "RelativePath": "api/AppUsers/verify",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

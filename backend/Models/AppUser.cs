@@ -10,5 +10,5 @@ public class AppUser : IdentityUser
 	public string FullName { get; set; } = null!;
 	public string? RefreshToken { get; set; }
 	public DateTime RefreshTokenExpiry { get; set; }
-	public bool isAdmin { get; set; } = false;
+	public string UserRole { get; set; } = null!;
 }
