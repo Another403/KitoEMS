@@ -1,14 +1,38 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
-import { api } from '../../api'
+import { api } from '../../api.jsx';
 
-const AddBook = () => {
+const EditBook = () => {
+	const { id } = useParams();
+	
 	const [book, setBook] = useState({
+		id: '',
 		name: '',
 		author: '',
-		price: 0
+		price: '',
+		createdAt: '',
 	});
+	const [bookLoading, setBookLoading] = useState(false);
+
+	useEffect(() => {
+		const fetchBook = async () => {
+			setBookLoading(true);
+			try {
+				const res = await api.get(`/Books/${id}`);
+
+				if (res.status === 200) {
+					setBook(res.data);
+					//console.log(res.data);
+				}
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setBookLoading(false);
+			}
+		};
+		fetchBook();
+	}, []);
 
 	const navigate = useNavigate();
 
@@ -17,10 +41,10 @@ const AddBook = () => {
 		setBook({...book, [name] : value});
 	}
 
-	const handleAddBook = async (e) => {
+	const handleEditBook = async (e) => {
 		e.preventDefault();
 		try {
-			const res = await api.post("/Books", book);
+			const res = await api.put(`/Books/${id}`, book);
 
 			if (res.data)
 				navigate("/admin-dashboard/storage");
@@ -30,9 +54,10 @@ const AddBook = () => {
 	}
 
 	return (
+		<>{bookLoading ? <div>Loading book...</div> :
 		<div className='max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md w-96'>
-			<h2 className='text-2xl font-bold mb-6'>Add book</h2>
-			<form onSubmit={handleAddBook}>
+			<h2 className='text-2xl font-bold mb-6'>Edit book</h2>
+			<form onSubmit={handleEditBook}>
 				<div>
 					<label htmlFor="name"
 						className='text-sm font-medium text-gray-700'>
@@ -67,11 +92,12 @@ const AddBook = () => {
 				</div>
 				<button type="submit"
 					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'>
-						Add book
+						Edit book
 				</button>
 			</form>
 		</div>
+		}</>
 	)
 }
 
-export default AddBook
+export default EditBook

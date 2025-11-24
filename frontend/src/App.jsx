@@ -8,6 +8,7 @@ import RoleBasedRoutes from './utils/RoleBasedRoutes';
 import AdminSummary from './components/dashboard/AdminSummary';
 import BooksList from './components/storage/BooksList';
 import AddBook from './components/storage/AddBook';
+import EditBook from './components/storage/EditBook';
 
 const App = () => {
 	return (
@@ -24,6 +25,7 @@ const App = () => {
 					<Route index element={<AdminSummary/>}></Route>
 					<Route path="/admin-dashboard/storage" element={<BooksList/>}></Route>
 					<Route path="/admin-dashboard/add-book" element={<AddBook/>}></Route>
+					<Route path="/admin-dashboard/storage/:id" element={<EditBook/>}></Route>
 				</Route>
 				<Route path = "/employee-dashboard" element={<EmployeeDashboard/>}/>
 				<Route path = "/login" element={<Login/>}/>
