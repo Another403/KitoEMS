@@ -14,6 +14,10 @@ public class EMSContext : IdentityDbContext
 		base.OnModelCreating(builder);
 
 		#region DECIMAL_PRECISION
+		builder.Entity<AppUser>()
+				.Property(b => b.Salary)
+				.HasPrecision(18, 2);
+
 		builder.Entity<Book>()
 				.Property(b => b.Price)
 				.HasPrecision(18, 2);

@@ -33,8 +33,8 @@ const Login = () => {
 				navigate('/employee-dashboard');
 			}
 
-			console.log(localStorage.getItem("token"));
-			console.log(localStorage.getItem("refreshToken"));
+			//console.log(localStorage.getItem("token"));
+			//console.log(localStorage.getItem("refreshToken"));
 		} catch (error) {
 			setError("Error");
 		}

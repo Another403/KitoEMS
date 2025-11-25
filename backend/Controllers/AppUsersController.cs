@@ -68,11 +68,32 @@ public class AppUsersController : Controller
 	}
 
 	[HttpPost("register")]
-	public async Task<IActionResult> UserRegister([FromBody] UserRegistration userRegistration)
+	public async Task<IActionResult> UserRegister([FromForm] UserRegistration userRegistration)
 	{
 		if (userRegistration == null)
 		{
 			return BadRequest(new { message = "new user is null!" });
+		}
+
+		string relativeURL = "";
+
+		if (userRegistration.Image != null)
+		{
+			var uploadsRoot = Path.Combine(Directory.GetCurrentDirectory(), "uploads");
+			if (!Directory.Exists(uploadsRoot))
+			{
+				Directory.CreateDirectory(uploadsRoot);
+			}
+
+			var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(userRegistration.Image.FileName);
+			var filePath = Path.Combine(uploadsRoot, uniqueFileName);
+
+			using (var stream = new FileStream(filePath, FileMode.Create))
+			{
+				await userRegistration.Image.CopyToAsync(stream);
+			}
+
+			relativeURL = $"/uploads/{uniqueFileName}";
 		}
 
 		AppUser user = new AppUser()
@@ -80,7 +101,9 @@ public class AppUsersController : Controller
 			UserName = userRegistration.Username,
 			Email = userRegistration.Email,
 			FullName = userRegistration.FullName,
-			UserRole = userRegistration.UserRole
+			UserRole = userRegistration.UserRole,
+			Salary = userRegistration.Salary,
+			UserImage = relativeURL
 		};
 		var result = await _userManager.CreateAsync(
 			user,

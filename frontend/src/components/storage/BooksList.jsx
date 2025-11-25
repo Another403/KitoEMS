@@ -3,12 +3,18 @@ import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
 import { api } from '../../api.jsx';
-import { columns, DepartmentButtons } from '../../utils/DepartmentHelper';
+import { BookColumns, BookButtons } from '../../utils/BookHelper';
 import autoprefixer from 'autoprefixer';
 
 const BooksList = () => {
 	const [books, setBooks] = useState([]);
 	const [booksLoading, setBooksLoading] = useState(false);
+	const [searchText, setSearchText] = useState("");
+
+	const onBookDelete = async (id) => {
+		const data = books.filter(book => book.id !== id);
+		setBooks(data);
+	}
 
 	useEffect(() => {
 		const fetchBooks = async () => {
@@ -22,7 +28,7 @@ const BooksList = () => {
 						name: book.name,
 						author: book.author,
 						price: book.price,
-						actions: (<DepartmentButtons id={book.id}/>)
+						actions: (<DepartmentButtons id={book.id} onBookDelete={onBookDelete}/>)
 					}));
 					setBooks(data);
 				}
@@ -42,10 +48,11 @@ const BooksList = () => {
 					<h3 className='text-2xl font-bold'>Storage</h3>
 				</div>
 				<div className='flex justify-between items-center'>
-					<input type="text" placeholder='Search books by name' 
+					<input type="text" placeholder='Search books by name'
+						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/add-book" 
+					<Link to="/admin-dashboard/add-employee" 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add new book
 					</Link>
@@ -53,7 +60,10 @@ const BooksList = () => {
 				<div className='mt-5'>
 					<DataTable
 						columns={columns}
-						data={books}
+						data={books.filter((book) =>
+							book.name.toLowerCase().includes(searchText.toLowerCase())
+						)}
+						pagination
 					/>
 				</div>
 			</div>

@@ -9,6 +9,8 @@ import AdminSummary from './components/dashboard/AdminSummary';
 import BooksList from './components/storage/BooksList';
 import AddBook from './components/storage/AddBook';
 import EditBook from './components/storage/EditBook';
+import EmployeeList from './components/employee/EmployeeList';
+import AddEmployee from './components/employee/AddEmployee';
 
 const App = () => {
 	return (
@@ -26,6 +28,9 @@ const App = () => {
 					<Route path="/admin-dashboard/storage" element={<BooksList/>}></Route>
 					<Route path="/admin-dashboard/add-book" element={<AddBook/>}></Route>
 					<Route path="/admin-dashboard/storage/:id" element={<EditBook/>}></Route>
+
+					<Route path="/admin-dashboard/employees" element={<EmployeeList/>}></Route>
+					<Route path="/admin-dashboard/add-employee" element={<AddEmployee/>}></Route>
 				</Route>
 				<Route path = "/employee-dashboard" element={<EmployeeDashboard/>}/>
 				<Route path = "/login" element={<Login/>}/>

@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 
-export const columns = [
+import { api } from '../api.jsx';
+
+export const BookColumns = [
 	{
 		name: "No.",
 		cell: (row, index) => index + 1,
@@ -29,15 +31,26 @@ export const columns = [
 	}
 ]
 
-export const DepartmentButtons = ({id}) => {
+export const BookButtons = ({id, onBookDelete}) => {
 	const navigate = useNavigate();
+
+	const handleDelete = async () => {
+		try {
+			const res = await api.delete(`/Books/${id}`);
+			onBookDelete(id);
+		} catch (error) {
+			console.log(error);
+		}
+	}
 
 	return (
 		<div className="flex space-x-3">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
 				onClick={() => navigate(`/admin-dashboard/storage/${id}`)} > 
 					Edit</button>
-			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800">Delete</button>
+			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
+				onClick={handleDelete}>
+					Delete</button>
 		</div>
 	)
 }
