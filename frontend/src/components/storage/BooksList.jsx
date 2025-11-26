@@ -28,7 +28,7 @@ const BooksList = () => {
 						name: book.name,
 						author: book.author,
 						price: book.price,
-						actions: (<DepartmentButtons id={book.id} onBookDelete={onBookDelete}/>)
+						actions: (<BookButtons id={book.id} onBookDelete={onBookDelete}/>)
 					}));
 					setBooks(data);
 				}
@@ -52,14 +52,14 @@ const BooksList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/add-employee" 
+					<Link to="/admin-dashboard/add-book" 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add new book
 					</Link>
 				</div>
 				<div className='mt-5'>
 					<DataTable
-						columns={columns}
+						columns={BookColumns}
 						data={books.filter((book) =>
 							book.name.toLowerCase().includes(searchText.toLowerCase())
 						)}

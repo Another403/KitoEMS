@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 
-import { useAuth } from '../contexts/authContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 const RoleBasedRoutes = ({ children, requiredRoles }) => {
 	const {user, loading} = useAuth();
 	

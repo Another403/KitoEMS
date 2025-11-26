@@ -2,55 +2,72 @@ import { useNavigate } from "react-router-dom";
 
 import { api } from '../api.jsx';
 
-export const BookColumns = [
+export const EmployeeColumns = [
 	{
 		name: "No.",
 		cell: (row, index) => index + 1,
-		width: "70px",
+		maxWidth: "70px",
 		right: true
 	},
 	{
-		name: 'Name',
-		selector : (row) => row.name,
-		sortable: true
-	},
-	{
-		name: 'Author',
-		selector : (row) => row.author,
-		sortable: true
-	},
-	{
-		name: 'Price',
-		selector : (row) => row.price.toFixed(2),
+		name: 'Full name',
+		selector : (row) => row.fullName,
 		sortable: true,
-		right: true
+		maxWidth: "300px",
+	},
+	{
+		name: 'Username',
+		selector : (row) => row.username,
+		sortable: true,
+		maxWidth: "150px"
+	},
+	{
+		name: 'Role',
+		selector : (row) => row.userRole,
+	},
+	{
+		name: 'Email',
+		selector : (row) => row.email
+	},
+	{
+		name: 'Base salary',
+		selector : (row) => row.salary.toFixed(2) + '$',
+		sortable: true
 	},
 	{
 		name: 'Actions',
-		cell : (row) => row.actions
+		cell : (row) => row.actions,
+		minWidth: "300px"
 	}
 ]
 
-export const EmployeeButtons = ({id}) => {
+export const EmployeeButtons = ({id, deleteable}) => {
 	const navigate = useNavigate();
 
 	const handleDelete = async () => {
 		try {
-			const res = await api.delete(`/Books/${id}`);
-			onBookDelete(id);
+			const res = await api.delete(`/AppUsers/${id}`);
 		} catch (error) {
 			console.log(error);
 		}
 	}
 
 	return (
-		<div className="flex space-x-3">
+		<div className="flex space-x-3 whitespace-nowrap">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				onClick={() => navigate(`/admin-dashboard/storage/${id}`)} > 
-					Edit</button>
+				onClick={() => navigate(`/admin-dashboard/employees/edit/${id}`)}>
+					Edit
+			</button>
+			<button className="px-3 py-1 bg-green-600 text-white hover:cursor-pointer hover:bg-green-800"
+				onClick={() => navigate(`/admin-dashboard/employees/${id}`)}>
+					View
+			</button>
+			{ deleteable ? 
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
 				onClick={handleDelete}>
-					Delete</button>
+					Delete
+			</button>
+			: <></>}
 		</div>
 	)
 }

@@ -1,6 +1,6 @@
-﻿namespace backend.Models;
+﻿namespace backend.Models.Dto;
 
-public class UserRegistration
+public class UserRegistrationModel
 {
 	public string Email { get; set; } = null!;
 	public string Password { get; set; } = null!;

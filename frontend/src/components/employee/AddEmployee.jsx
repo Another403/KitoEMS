@@ -38,7 +38,7 @@ const AddEmployee = () => {
 		
 		const formDataObject = new FormData();
 		Object.keys(formData).forEach((key) => {
-			if (key !== 'password2') {
+			if (key !== 'Password2') {
 				formDataObject.append(key, formData[key]);
 			}
 		})

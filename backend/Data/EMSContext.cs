@@ -13,6 +13,14 @@ public class EMSContext : IdentityDbContext
 	{
 		base.OnModelCreating(builder);
 
+		#region RELATIONSHIPS
+		builder.Entity<Payroll>()
+			.HasOne(p => p.User)
+			.WithMany()
+			.HasForeignKey(p => p.UserId)
+			.OnDelete(DeleteBehavior.Cascade);
+		#endregion
+
 		#region DECIMAL_PRECISION
 		builder.Entity<AppUser>()
 				.Property(b => b.Salary)

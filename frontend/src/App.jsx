@@ -11,6 +11,9 @@ import AddBook from './components/storage/AddBook';
 import EditBook from './components/storage/EditBook';
 import EmployeeList from './components/employee/EmployeeList';
 import AddEmployee from './components/employee/AddEmployee';
+import ViewEmployee from './components/employee/ViewEmployee';
+import EditEmployee from './components/employee/EditEmployee';
+import PayrollsList from './components/payrolls/PayrollsList';
 
 const App = () => {
 	return (
@@ -30,7 +33,11 @@ const App = () => {
 					<Route path="/admin-dashboard/storage/:id" element={<EditBook/>}></Route>
 
 					<Route path="/admin-dashboard/employees" element={<EmployeeList/>}></Route>
+					<Route path="/admin-dashboard/employees/:id" element={<ViewEmployee/>}></Route>
+					<Route path="/admin-dashboard/employees/edit/:id" element={<EditEmployee/>}></Route>
 					<Route path="/admin-dashboard/add-employee" element={<AddEmployee/>}></Route>
+
+					<Route path="/admin-dashboard/payrolls" element={<PayrollsList/>}></Route>
 				</Route>
 				<Route path = "/employee-dashboard" element={<EmployeeDashboard/>}/>
 				<Route path = "/login" element={<Login/>}/>

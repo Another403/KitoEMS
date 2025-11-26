@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
+using backend.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +69,7 @@ public class AppUsersController : Controller
 	}
 
 	[HttpPost("register")]
-	public async Task<IActionResult> UserRegister([FromForm] UserRegistration userRegistration)
+	public async Task<IActionResult> UserRegister([FromForm] UserRegistrationModel userRegistration)
 	{
 		if (userRegistration == null)
 		{
@@ -182,6 +183,30 @@ public class AppUsersController : Controller
 		var token = tokenHandler.WriteToken(securityToken);
 
 		return Ok(new { token });
+	}
+
+	[HttpPut("{id}")]
+	public async Task<IActionResult> UpdateUserInfo(string id, [FromForm] UserUpdateModel userUpdateModel)
+	{
+		var _user = await _userManager.FindByIdAsync(id);
+
+		if (_user == null)
+			return BadRequest(new { error = "user not found" });
+
+		_user.FullName = userUpdateModel.FullName;
+		_user.UserName = userUpdateModel.Username;
+		_user.Email = userUpdateModel.Email;
+		_user.Salary = userUpdateModel.Salary;
+		_user.UserRole = userUpdateModel.UserRole;
+
+		var result = await _userManager.UpdateAsync(_user);
+
+		if (result.Succeeded)
+		{
+			return Ok(_user);
+		}
+
+		return BadRequest();
 	}
 
 	[HttpDelete("all")]
