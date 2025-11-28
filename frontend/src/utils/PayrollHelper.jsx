@@ -40,25 +40,16 @@ export const PayrollColumns = [
 	}
 ]
 
-export const PayrollButtons = ({id}) => {
+export const PayrollButtons = ({id, handleDelete}) => {
 	const navigate = useNavigate();
-
-	const handleDelete = async () => {
-		try {
-			const res = await api.delete(`/Books/${id}`);
-			onBookDelete(id);
-		} catch (error) {
-			console.log(error);
-		}
-	}
 
 	return (
 		<div className="flex space-x-3">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				> 
+				onClick={() => navigate(`/admin-dashboard/payrolls/edit/${id}`)}>
 					Edit</button>
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
-				>
+				onClick={() => handleDelete(id)}>
 					Delete</button>
 		</div>
 	)

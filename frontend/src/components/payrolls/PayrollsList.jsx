@@ -11,37 +11,45 @@ const PayrollsList = () => {
 	const [payrollsLoading, setPayrollsLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
 
-	const onPayrollDelete = async (id) => {
-		const data = payrolls.filter(payroll => payroll.id !== id);
-		setPayrolls(data);
-	}
+	const fetchPayrolls = async () => {
+		setPayrollsLoading(true);
+		try {
+			const res = await api.get('/Payrolls');
 
-	useEffect(() => {
-		const fetchPayrolls = async () => {
-			setPayrollsLoading(true);
-			try {
-				const res = await api.get('/Payrolls');
-
-				if (res.status === 200)
-				{
-					const data = res.data.map((payroll) => ({
-						employeeName: payroll.user.fullName,
-						period: `${payroll.month}-${payroll.year}`,
-						baseSalary: payroll.baseSalary,
-						bonus: payroll.bonus,
-						total: payroll.total,
-						actions: (<PayrollButtons id={payroll.id}/>)
-					}));
-					setPayrolls(data);
-				}
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setPayrollsLoading(false);
+			if (res.status === 200)
+			{
+				const data = res.data.map((payroll) => ({
+					id: payroll.id,
+					employeeName: payroll.user.fullName,
+					period: `${payroll.month}-${payroll.year}`,
+					baseSalary: payroll.baseSalary,
+					bonus: payroll.bonus,
+					total: payroll.total,
+					actions: (<PayrollButtons id={payroll.id} handleDelete={handleDelete}/>)
+				}));
+				setPayrolls(data);
 			}
-		};
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setPayrollsLoading(false);
+		}
+	};
+	
+	useEffect(() => {
 		fetchPayrolls();
 	}, []);
+
+	const handleDelete = async (id) => {
+		setPayrolls(payrolls.filter(payroll => payroll.id !== id));
+		try {
+			const res = await api.delete(`/Payrolls/${id}`);
+			await fetchPayrolls();
+		} catch (error) {
+			console.log(error);
+			await fetchPayrolls();
+		}
+	}
 
   	return (
 		<>{payrollsLoading ? <div>Loading...</div> :
@@ -54,9 +62,9 @@ const PayrollsList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard" 
+					<Link to="/admin-dashboard/add-payroll" 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
-							Add new payroll
+							Add payroll
 					</Link>
 				</div>
 				<div className='mt-5'>

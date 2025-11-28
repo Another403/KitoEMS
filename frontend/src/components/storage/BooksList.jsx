@@ -11,33 +11,42 @@ const BooksList = () => {
 	const [booksLoading, setBooksLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
 
-	const onBookDelete = async (id) => {
+	const fetchBooks = async () => {
+		setBooksLoading(true);
+		try {
+			const res = await api.get('/Books');
+
+			if (res.status === 200)
+			{
+				const data = res.data.map((book) => ({
+					name: book.name,
+					author: book.author,
+					price: book.price,
+					actions: (<BookButtons id={book.id} handleDelete={handleDelete}/>)
+				}));
+				setBooks(data);
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setBooksLoading(false);
+		}
+	};
+
+	const handleDelete = async (id) => {
 		const data = books.filter(book => book.id !== id);
 		setBooks(data);
+
+		try {
+			const res = await api.delete(`/Books/${id}`);
+			fetchBooks();
+		} catch (error) {
+			console.log(error);
+			fetchBooks();
+		}
 	}
 
 	useEffect(() => {
-		const fetchBooks = async () => {
-			setBooksLoading(true);
-			try {
-				const res = await api.get('/Books');
-
-				if (res.status === 200)
-				{
-					const data = res.data.map((book) => ({
-						name: book.name,
-						author: book.author,
-						price: book.price,
-						actions: (<BookButtons id={book.id} onBookDelete={onBookDelete}/>)
-					}));
-					setBooks(data);
-				}
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setBooksLoading(false);
-			}
-		};
 		fetchBooks();
 	}, []);
 

@@ -14,6 +14,8 @@ import AddEmployee from './components/employee/AddEmployee';
 import ViewEmployee from './components/employee/ViewEmployee';
 import EditEmployee from './components/employee/EditEmployee';
 import PayrollsList from './components/payrolls/PayrollsList';
+import AddPayroll from './components/payrolls/AddPayroll';
+import EditPayroll from './components/payrolls/EditPayroll';
 
 const App = () => {
 	return (
@@ -38,6 +40,8 @@ const App = () => {
 					<Route path="/admin-dashboard/add-employee" element={<AddEmployee/>}></Route>
 
 					<Route path="/admin-dashboard/payrolls" element={<PayrollsList/>}></Route>
+					<Route path="/admin-dashboard/add-payroll" element={<AddPayroll/>}></Route>
+					<Route path="/admin-dashboard/payrolls/edit/:id" element={<EditPayroll/>}></Route>
 				</Route>
 				<Route path = "/employee-dashboard" element={<EmployeeDashboard/>}/>
 				<Route path = "/login" element={<Login/>}/>

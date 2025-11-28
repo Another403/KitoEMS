@@ -31,17 +31,8 @@ export const BookColumns = [
 	}
 ]
 
-export const BookButtons = ({id, onBookDelete}) => {
+export const BookButtons = ({id, handleDelete}) => {
 	const navigate = useNavigate();
-
-	const handleDelete = async () => {
-		try {
-			const res = await api.delete(`/Books/${id}`);
-			onBookDelete(id);
-		} catch (error) {
-			console.log(error);
-		}
-	}
 
 	return (
 		<div className="flex space-x-3">
@@ -49,7 +40,7 @@ export const BookButtons = ({id, onBookDelete}) => {
 				onClick={() => navigate(`/admin-dashboard/storage/${id}`)} > 
 					Edit</button>
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
-				onClick={handleDelete}>
+				onClick={() => handleDelete(id)}>
 					Delete</button>
 		</div>
 	)

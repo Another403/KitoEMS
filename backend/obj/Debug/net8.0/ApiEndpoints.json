@@ -433,7 +433,7 @@
     "Parameters": [
       {
         "Name": "id",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       },
       {
@@ -446,7 +446,7 @@
   },
   {
     "ContainingType": "backend.Controllers.PayrollsController",
-    "Method": "DeleteBook",
+    "Method": "DeletePayroll",
     "RelativePath": "api/Payrolls/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,

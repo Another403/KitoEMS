@@ -34,7 +34,9 @@ public class PayrollsController : Controller
 	[HttpGet("{id}")]
 	public async Task<ActionResult<Payroll>> GetPayrollById(Guid id)
 	{
-		var payroll = await _context.Payrolls.FindAsync(id);
+		var payroll = await _context.Payrolls
+			.Include(p => p.User)
+			.FirstOrDefaultAsync(p => p.Id == id);
 
 		if (payroll == null)
 			return NotFound();
@@ -82,7 +84,7 @@ public class PayrollsController : Controller
 	}
 
 	[HttpPut("{id}")]
-	public async Task<IActionResult> UpdatePayroll(string id, [FromBody] AddPayrollModel updatePayroll)
+	public async Task<IActionResult> UpdatePayroll(Guid id, [FromBody] AddPayrollModel updatePayroll)
 	{
 		var payroll = await _context.Payrolls.FindAsync(id);
 
@@ -122,7 +124,7 @@ public class PayrollsController : Controller
 	}
 
 	[HttpDelete("{id}")]
-	public async Task<IActionResult> DeleteBook(Guid id)
+	public async Task<IActionResult> DeletePayroll(Guid id)
 	{
 		var payroll = await _context.Payrolls.FindAsync(id);
 

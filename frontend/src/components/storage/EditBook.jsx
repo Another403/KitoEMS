@@ -95,7 +95,7 @@ const EditBook = () => {
 						Edit book
 				</button>
 				<button type="button"
-					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
+					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
 					onClick={() => navigate('/admin-dashboard/storage')}>
 						Cancel
 				</button>
