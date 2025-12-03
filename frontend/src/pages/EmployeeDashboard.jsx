@@ -3,13 +3,13 @@ import { useNavigate, Outlet } from 'react-router-dom';
 
 import { useAuth } from '../contexts/AuthContext.jsx';
 
-import AdminSidebar from '../components/dashboard/EmployeeSidebar.jsx';
 import Navbar from '../components/dashboard/Navbar.jsx';
+import EmployeeSidebar from '../components/dashboard/EmployeeSidebar.jsx';
 
 const EmployeeDashboard = () => {
 	return (
 		<div className='flex'>
-			<AdminSidebar/>
+			<EmployeeSidebar/>
 			<div className='flex-1 ml-64 bg-gray-100 h-screen'>
 				<Navbar/>
 				<Outlet/>

@@ -13,6 +13,12 @@ public class EMSContext : IdentityDbContext
 	{
 		base.OnModelCreating(builder);
 
+		#region CONSTRAINTS
+		builder.Entity<Customer>()
+			.HasIndex(c => c.PhoneNumber)
+			.IsUnique();
+		#endregion
+
 		#region RELATIONSHIPS
 		builder.Entity<Payroll>()
 			.HasOne(p => p.User)

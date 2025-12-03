@@ -17,6 +17,9 @@ import PayrollsList from './components/payrolls/PayrollsList';
 import AddPayroll from './components/payrolls/AddPayroll';
 import EditPayroll from './components/payrolls/EditPayroll';
 import ImportBook from './components/storage/ImportBook';
+import CustomersList from './components/customer/CustomersList';
+import AddCustomer from './components/customer/AddCustomer';
+import EditCustomer from './components/customer/EditCustomer';
 
 const App = () => {
 	return (
@@ -31,21 +34,38 @@ const App = () => {
 					</PrivateRoutes>
 				}>
 					<Route index element={<AdminSummary/>}></Route>
+					{/* Storage */}
 					<Route path="/admin-dashboard/storage" element={<BooksList/>}></Route>
 					<Route path="/admin-dashboard/add-book" element={<AddBook/>}></Route>
 					<Route path="/admin-dashboard/storage/:id" element={<EditBook/>}></Route>
 					<Route path="/admin-dashboard/storage/import" element={<ImportBook/>}></Route>
 
+					{/* Employees */}
 					<Route path="/admin-dashboard/employees" element={<EmployeeList/>}></Route>
 					<Route path="/admin-dashboard/employees/:id" element={<ViewEmployee/>}></Route>
 					<Route path="/admin-dashboard/employees/edit/:id" element={<EditEmployee/>}></Route>
 					<Route path="/admin-dashboard/add-employee" element={<AddEmployee/>}></Route>
 
+					{/* Payrolls */}
 					<Route path="/admin-dashboard/payrolls" element={<PayrollsList/>}></Route>
 					<Route path="/admin-dashboard/add-payroll" element={<AddPayroll/>}></Route>
 					<Route path="/admin-dashboard/payrolls/edit/:id" element={<EditPayroll/>}></Route>
+
+					{/* Customers */}
+					<Route path="/admin-dashboard/customers" element={<CustomersList/>}></Route>
+					<Route path="/admin-dashboard/customers/add" element={<AddCustomer/>}></Route>
+					<Route path="/admin-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
 				</Route>
-				<Route path = "/employee-dashboard" element={<EmployeeDashboard/>}/>
+				<Route path = "/employee-dashboard" element={
+					<PrivateRoutes>
+						<RoleBasedRoutes requiredRoles={["admin, employee"]}>
+							<EmployeeDashboard/>
+						</RoleBasedRoutes>
+					</PrivateRoutes>
+				}>
+					<Route index element={<></>}></Route>
+					<Route path="/employee-dashboard/profile" element={<></>}></Route>
+				</Route>
 				<Route path = "/login" element={<Login/>}/>
 			</Routes>
 		</BrowserRouter>
