@@ -20,6 +20,11 @@ import ImportBook from './components/storage/ImportBook';
 import CustomersList from './components/customer/CustomersList';
 import AddCustomer from './components/customer/AddCustomer';
 import EditCustomer from './components/customer/EditCustomer';
+import LeavesList from './components/leave/LeavesList';
+import AdminLeavesList from './components/leave/AdminLeavesList';
+import AddLeave from './components/leave/AddLeave';
+import AdminAddLeave from './components/leave/AdminAddLeave';
+import AdminEditLeave from './components/leave/AdminEditLeave';
 
 const App = () => {
 	return (
@@ -56,6 +61,11 @@ const App = () => {
 					<Route path="/admin-dashboard/customers" element={<CustomersList/>}></Route>
 					<Route path="/admin-dashboard/customers/add" element={<AddCustomer/>}></Route>
 					<Route path="/admin-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
+
+					{/* AdminLeaves */}
+					<Route path="/admin-dashboard/leaves" element={<AdminLeavesList/>}></Route>
+					<Route path="/admin-dashboard/leaves/add" element={<AdminAddLeave/>}></Route>
+					<Route path="/admin-dashboard/leaves/edit/:id" element={<AdminEditLeave/>}></Route>
 				</Route>
 
 				{/* EMPLOYEE DASHBOARD */}
@@ -73,6 +83,10 @@ const App = () => {
 					<Route path="/employee-dashboard/customers" element={<CustomersList/>}></Route>
 					<Route path="/employee-dashboard/customers/add" element={<AddCustomer/>}></Route>
 					<Route path="/employee-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
+
+					{/* Leaves */}
+					<Route path="/employee-dashboard/leaves" element={<LeavesList/>}></Route>
+					<Route path="/employee-dashboard/leaves/add" element={<AddLeave/>}></Route>
 				</Route>
 
 				<Route path = "/login" element={<Login/>}/>

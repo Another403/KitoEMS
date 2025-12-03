@@ -17,6 +17,10 @@ public class EMSContext : IdentityDbContext
 		builder.Entity<Customer>()
 			.HasIndex(c => c.PhoneNumber)
 			.IsUnique();
+
+		builder.Entity<Leave>()
+			.HasIndex(l => new { l.UserId, l.StartDate, l.EndDate })
+			.IsUnique();
 		#endregion
 
 		#region RELATIONSHIPS
@@ -25,10 +29,10 @@ public class EMSContext : IdentityDbContext
 			.WithMany()
 			.HasForeignKey(p => p.UserId)
 			.OnDelete(DeleteBehavior.Cascade);
-		#endregion
+	#endregion
 
-		#region DECIMAL_PRECISION
-		builder.Entity<AppUser>()
+	#region DECIMAL_PRECISION
+	builder.Entity<AppUser>()
 				.Property(b => b.Salary)
 				.HasPrecision(18, 2);
 

@@ -35,6 +35,11 @@ const EmployeeSidebar = () => {
 					<FaLayerGroup/>
 					<span>Customers</span>
 				</NavLink>
+				<NavLink to='/employee-dashboard/leaves'
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
+					<FaLayerGroup/>
+					<span>Leaves</span>
+				</NavLink>
 			</div>
 		</div>
 	)

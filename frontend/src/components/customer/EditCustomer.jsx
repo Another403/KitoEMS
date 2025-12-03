@@ -104,7 +104,7 @@ const EditCustomer = () => {
 				{/* Submit */}
 				<button
 					type="submit"
-					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded'>
+					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'>
 					Save Changes
 				</button>
 
@@ -112,7 +112,7 @@ const EditCustomer = () => {
 				<button
 					type="button"
 					onClick={() => navigate('/admin-dashboard/customers')}
-					className='w-full mt-3 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded'>
+					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'>
 					Cancel
 				</button>
 

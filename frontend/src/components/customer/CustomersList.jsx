@@ -50,28 +50,31 @@ const CustomersList = () => {
 	}
 
 	return (
-		<div className='p-5'>
-			<div className='text-center'>
-				<h3 className='text-2xl font-bold'>Customers</h3>
-			</div>
-			<div className='flex justify-between items-center'>
-				<input type="text" placeholder='Search cutomers by name'
-					onChange={(e) => setSearchText(e.target.value)}
-					className='px-4 py-0.5 border'>
-				</input>
-				<Link to="/admin-dashboard/customers/add" 
-					className='px-4 py-1 bg-teal-600 rounded text-white'>
-						Add customer
-				</Link>
-			</div>
-			<div className='mt-5'>
-				<DataTable
-					columns={CustomerColumns}
-					data={customers}
-					pagination
-				/>
-			</div>
+		<> { customersLoading ? <div>Loading customers...</div> :
+			<div className='p-5'>
+				<div className='text-center'>
+					<h3 className='text-2xl font-bold'>Customers</h3>
+				</div>
+				<div className='flex justify-between items-center'>
+					<input type="text" placeholder='Search cutomers by name'
+						onChange={(e) => setSearchText(e.target.value)}
+						className='px-4 py-0.5 border'>
+					</input>
+					<Link to="/admin-dashboard/customers/add" 
+						className='px-4 py-1 bg-teal-600 rounded text-white'>
+							Add customer
+					</Link>
+				</div>
+				<div className='mt-5'>
+					<DataTable
+						columns={CustomerColumns}
+						data={customers.filter((customer) =>
+								customer.name.toLowerCase().includes(searchText.toLowerCase()))}
+						pagination
+					/>
+				</div>
 		</div>
+		} </>
 	)
 }
 
