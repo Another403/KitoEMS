@@ -12,7 +12,7 @@ const EditPayroll = () => {
 
 	const [payroll, setPayroll] = useState({
 		user: {
-			username: '',
+			userName: '',
 			id: ''
 		},
 		baseSalary: '',
@@ -53,6 +53,15 @@ const EditPayroll = () => {
 	const handleAddPayroll = async (e) => {
 		e.preventDefault();
 		try {
+			const newPayroll = {
+				id,
+				month: payroll.month,
+				year: payroll.year,
+				baseSalary: payroll.baseSalary,
+				bonus: payroll.bonus,
+				userId: payroll.userId
+			};
+
 			const res = await api.put(`/Payrolls/${id}`, payroll);
 
 			if (res.data)
@@ -90,6 +99,7 @@ const EditPayroll = () => {
 						onChange={handleUserSelect}
 						placeholder="Type to search user by name..."
 						isSearchable={true}
+						isDisabled={true}
 						className="cursor-not-allowed opacity-70"
 					/>
 				</div>

@@ -10,32 +10,47 @@ const EmployeeList = () => {
 	const [employees, setEmployees] = useState([]);
 	const [employeesLoading, setEmployeesLoading] = useState(false);
 
-	useEffect(() => {
-		const fetchEmployees = async () => {
-			setEmployeesLoading(true);
-			try {
-				const res = await api.get('/AppUsers');
+	const fetchEmployees = async () => {
+		setEmployeesLoading(true);
+		try {
+			const res = await api.get('/AppUsers');
 
-				if (res.status === 200)
-				{
-					const data = res.data.map((employee) => ({
-						fullName: employee.fullName,
-						salary: employee.salary,
-						userRole: employee.userRole,
-						username: employee.userName,
-						email: employee.email,
-						actions: (<EmployeeButtons id={employee.id} deleteable={employee.userRole !== 'admin'}/>)
-					}));
-					setEmployees(data);
-				}
-			} catch (error) {
-				console.log(error);
-			} finally {
-				setEmployeesLoading(false);
+			if (res.status === 200)
+			{
+				const data = res.data.map((employee) => ({
+					id: employee.id,
+					fullName: employee.fullName,
+					salary: employee.salary,
+					userRole: employee.userRole,
+					username: employee.userName,
+					email: employee.email,
+					actions: (<EmployeeButtons id={employee.id} deleteable={employee.userRole !== 'admin'} handleDelete={handleDelete}/>)
+				}));
+				setEmployees(data);
 			}
-		};
+		} catch (error) {
+			console.log(error);
+		} finally {
+			setEmployeesLoading(false);
+		}
+	};
+
+	useEffect(() => {
 		fetchEmployees();
 	}, []);
+
+	const handleDelete = async (id) => {
+		const data = employees.filter(employee => employee.id !== id);
+		setEmployees(data);
+
+		try {
+			const res = await api.delete(`/AppUsers/${id}`);
+			await fetchEmployees();
+		} catch (error) {
+			console.log(error);
+			await fetchEmployees();
+		}
+	}
 	
 	return (
 		<>{employeesLoading ? <div>Loading employee...</div> :

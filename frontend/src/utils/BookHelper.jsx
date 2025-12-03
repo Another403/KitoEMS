@@ -26,6 +26,11 @@ export const BookColumns = [
 		right: true
 	},
 	{
+		name: 'Quantity',
+		selector : (row) => row.quantity,
+		sortable: true
+	},
+	{
 		name: 'Actions',
 		cell : (row) => row.actions
 	}

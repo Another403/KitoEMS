@@ -300,6 +300,57 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "backend.Controllers.BooksController",
+    "Method": "GetAllBooksStorages",
+    "RelativePath": "api/Books/storages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[backend.Models.Storage, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "backend.Controllers.BooksController",
+    "Method": "AddStorages",
+    "RelativePath": "api/Books/storages",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.BooksController",
+    "Method": "ImportBook",
+    "RelativePath": "api/Books/storages/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "importBookModel",
+        "Type": "backend.Models.Dto.ImportBookModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "backend.Controllers.CustomersController",
     "Method": "GetAllCustomers",
     "RelativePath": "api/Customers",
@@ -438,7 +489,7 @@
       },
       {
         "Name": "updatePayroll",
-        "Type": "backend.Models.Dto.AddPayrollModel",
+        "Type": "backend.Models.Payroll",
         "IsRequired": true
       }
     ],

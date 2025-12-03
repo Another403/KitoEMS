@@ -41,16 +41,8 @@ export const EmployeeColumns = [
 	}
 ]
 
-export const EmployeeButtons = ({id, deleteable}) => {
+export const EmployeeButtons = ({id, deleteable, handleDelete}) => {
 	const navigate = useNavigate();
-
-	const handleDelete = async () => {
-		try {
-			const res = await api.delete(`/AppUsers/${id}`);
-		} catch (error) {
-			console.log(error);
-		}
-	}
 
 	return (
 		<div className="flex space-x-3 whitespace-nowrap">
@@ -64,7 +56,7 @@ export const EmployeeButtons = ({id, deleteable}) => {
 			</button>
 			{ deleteable ? 
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
-				onClick={handleDelete}>
+				onClick={() => handleDelete(id)}>
 					Delete
 			</button>
 			: <></>}

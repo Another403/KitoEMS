@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaInfo, FaUser, FaLayerGroup, FaCalendar, FaRegMoneyBillAlt } from 'react-icons/fa';
 
-const AdminSidebar = () => {
+const EmployeeSidebar = () => {
 	return (
 		<div className='bg-gray-800 text-white h-screen fixed left-0 top-0 bottom-0 space-y-2 w-64'>
 			<div className='bg-teal-600 h-12 flex items-center justify-center'>
@@ -11,38 +11,23 @@ const AdminSidebar = () => {
 				</h3>
 			</div>
 			<div className='px-4'>
-				<NavLink to='/admin-dashboard'
+				<NavLink to='/employee-dashboard'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}
 					end>
 					<FaTachometerAlt/>
 					<span>Dashboard</span>
 				</NavLink>
-				<NavLink to='/admin-dashboard/employees'
+				<NavLink to='/employee-dashboard'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaUser/>
-					<span>Employees</span>
+					<span>Profile</span>
 				</NavLink>
-				<NavLink to='/admin-dashboard'
-					className='flex items-center space-x-4 block py-2.5 px-4 rounded'>
-					<FaInfo/>
-					<span>Reports</span>
-				</NavLink>
-				<NavLink to='/admin-dashboard/storage'
-					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-					<FaLayerGroup/>
-					<span>Storage</span>
-				</NavLink>
-				<NavLink to='/admin-dashboard'
-					className='flex items-center space-x-4 block py-2.5 px-4 rounded'>
-					<FaCalendar/>
-					<span>Leaves</span>
-				</NavLink>
-				<NavLink to='/admin-dashboard/payrolls'
+				<NavLink to='/employee-dashboard/payrolls'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaRegMoneyBillAlt/>
 					<span>Payrolls</span>
 				</NavLink>
-				<NavLink to='/admin-dashboard/customers'
+				<NavLink to='/employee-dashboard/customers'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaLayerGroup/>
 					<span>Customers</span>
@@ -52,4 +37,4 @@ const AdminSidebar = () => {
 	)
 }
 
-export default AdminSidebar
+export default EmployeeSidebar

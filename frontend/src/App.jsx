@@ -16,6 +16,7 @@ import EditEmployee from './components/employee/EditEmployee';
 import PayrollsList from './components/payrolls/PayrollsList';
 import AddPayroll from './components/payrolls/AddPayroll';
 import EditPayroll from './components/payrolls/EditPayroll';
+import ImportBook from './components/storage/ImportBook';
 
 const App = () => {
 	return (
@@ -33,6 +34,7 @@ const App = () => {
 					<Route path="/admin-dashboard/storage" element={<BooksList/>}></Route>
 					<Route path="/admin-dashboard/add-book" element={<AddBook/>}></Route>
 					<Route path="/admin-dashboard/storage/:id" element={<EditBook/>}></Route>
+					<Route path="/admin-dashboard/storage/import" element={<ImportBook/>}></Route>
 
 					<Route path="/admin-dashboard/employees" element={<EmployeeList/>}></Route>
 					<Route path="/admin-dashboard/employees/:id" element={<ViewEmployee/>}></Route>

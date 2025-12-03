@@ -84,25 +84,13 @@ public class PayrollsController : Controller
 	}
 
 	[HttpPut("{id}")]
-	public async Task<IActionResult> UpdatePayroll(Guid id, [FromBody] AddPayrollModel updatePayroll)
+	public async Task<IActionResult> UpdatePayroll(Guid id, [FromBody] Payroll updatePayroll)
 	{
 		var payroll = await _context.Payrolls.FindAsync(id);
 
 		if (payroll == null)
 		{
 			return NotFound(new { message = "Payroll not found!"});
-		}
-
-		if (updatePayroll.UserId != payroll.UserId)
-		{
-			var _user = await _userManager.FindByIdAsync(updatePayroll.UserId);
-
-			if (_user == null)
-			{
-				return NotFound(new { message = "User not found!" });
-			}
-
-			payroll.User = _user;
 		}
 
 		payroll.Month = updatePayroll.Month;

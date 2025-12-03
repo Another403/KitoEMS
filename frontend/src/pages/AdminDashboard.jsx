@@ -4,7 +4,7 @@ import { useNavigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 import AdminSidebar from '../components/dashboard/AdminSidebar.jsx';
-import Navbar from '../components/dashboard/Navbar.jsx';
+import Navbar from '../components/dashboard/Navbar';
 import AdminSummary from '../components/dashboard/AdminSummary.jsx';
 
 const AdminDashboard = () => {

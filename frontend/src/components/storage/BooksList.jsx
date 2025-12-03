@@ -14,18 +14,25 @@ const BooksList = () => {
 	const fetchBooks = async () => {
 		setBooksLoading(true);
 		try {
-			const res = await api.get('/Books');
+			const booksRes = await api.get('/Books');
+			const storagesRes = await api.get('/Books/storages');
 
-			if (res.status === 200)
-			{
-				const data = res.data.map((book) => ({
+			const storages = storagesRes.data;
+
+			const data = booksRes.data.map(book => {
+				const storage = storages.find(s => s.id === book.id);
+				return {
+					id: book.id,
 					name: book.name,
 					author: book.author,
 					price: book.price,
-					actions: (<BookButtons id={book.id} handleDelete={handleDelete}/>)
-				}));
-				setBooks(data);
-			}
+					quantity: storage ? storage.quantity : 0,
+					actions: <BookButtons id={book.id} handleDelete={handleDelete} />
+				};
+			});
+
+			setBooks(data);
+
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -39,10 +46,10 @@ const BooksList = () => {
 
 		try {
 			const res = await api.delete(`/Books/${id}`);
-			fetchBooks();
+			await fetchBooks();
 		} catch (error) {
 			console.log(error);
-			fetchBooks();
+			await fetchBooks();
 		}
 	}
 
@@ -61,10 +68,16 @@ const BooksList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/add-book" 
-						className='px-4 py-1 bg-teal-600 rounded text-white'>
-							Add new book
-					</Link>
+					<div className='flex space-x-2'>
+						<Link to="/admin-dashboard/storage/import" 
+							className='px-4 py-1 bg-teal-600 rounded text-white'>
+								Import
+						</Link>
+						<Link to="/admin-dashboard/add-book" 
+							className='px-4 py-1 bg-teal-600 rounded text-white'>
+								Add new book
+						</Link>
+					</div>
 				</div>
 				<div className='mt-5'>
 					<DataTable
