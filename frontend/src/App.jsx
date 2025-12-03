@@ -25,6 +25,7 @@ const App = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
+				{/* ADMIN DASHBOARD */}
 				<Route path = "/" element={<Navigate to="/admin-dashboard"/>}/>
 				<Route path = "/admin-dashboard" element={
 					<PrivateRoutes>
@@ -56,6 +57,8 @@ const App = () => {
 					<Route path="/admin-dashboard/customers/add" element={<AddCustomer/>}></Route>
 					<Route path="/admin-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
 				</Route>
+
+				{/* EMPLOYEE DASHBOARD */}
 				<Route path = "/employee-dashboard" element={
 					<PrivateRoutes>
 						<RoleBasedRoutes requiredRoles={["admin, employee"]}>
@@ -64,8 +67,14 @@ const App = () => {
 					</PrivateRoutes>
 				}>
 					<Route index element={<></>}></Route>
-					<Route path="/employee-dashboard/profile" element={<></>}></Route>
+					<Route path="/employee-dashboard/profile/:id" element={<ViewEmployee/>}></Route>
+
+					{/* Customers */}
+					<Route path="/employee-dashboard/customers" element={<CustomersList/>}></Route>
+					<Route path="/employee-dashboard/customers/add" element={<AddCustomer/>}></Route>
+					<Route path="/employee-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
 				</Route>
+
 				<Route path = "/login" element={<Login/>}/>
 			</Routes>
 		</BrowserRouter>

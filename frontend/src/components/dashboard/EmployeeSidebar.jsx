@@ -20,7 +20,7 @@ const EmployeeSidebar = () => {
 					<FaTachometerAlt/>
 					<span>Dashboard</span>
 				</NavLink>
-				<NavLink to='/employee-dashboard/profile'
+				<NavLink to={`/employee-dashboard/profile/${user.id}`}
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaUser/>
 					<span>Profile</span>
