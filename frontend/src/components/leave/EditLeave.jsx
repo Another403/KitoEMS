@@ -5,6 +5,7 @@ import Select from "react-select";
 
 import { api } from "../../api";
 import CustomInput from "../CustomInput";
+import { useAuth } from '../../contexts/AuthContext.jsx';
 
 const AdminEditLeave = () => {
 	const { id } = useParams();
@@ -18,24 +19,17 @@ const AdminEditLeave = () => {
 		status: "pending"
 	});
 
-	const [users, setUsers] = useState([]);
+	const { user } = useAuth();
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
 		const loadData = async () => {
 			try {
-				const usersRes = await api.get("/AppUsers");
-				const userOptions = usersRes.data.map(u => ({
-					value: u.id,
-					label: u.userName
-				}));
-				setUsers(userOptions);
-
 				const leaveRes = await api.get(`/Leaves/${id}`);
 				const l = leaveRes.data;
 
 				setLeave({
-					userId: l.userId,
+					userId: l.user.id,
 					startDate: new Date(l.startDate),
 					endDate: new Date(l.endDate),
 					reason: l.reason,
@@ -74,7 +68,7 @@ const AdminEditLeave = () => {
 			};
 
 			await api.put(`/Leaves/${id}`, payload);
-			navigate("/admin-dashboard/leaves");
+			navigate("/employee-dashboard/leaves");
 		} catch (err) {
 			console.log(err);
 		}
@@ -89,8 +83,8 @@ const AdminEditLeave = () => {
 			<form onSubmit={handleUpdateLeave}>
 				<label>User</label>
 				<Select
-					options={users}
-					value={users.find(u => u.value === leave.userId)}
+					options={[]}
+					value={{label: user.userName, id: user.id}}
 					isSearchable={true}
 					isDisabled={true}
 					className="cursor-not-allowed opacity-70"
@@ -126,18 +120,6 @@ const AdminEditLeave = () => {
 					className="mt-1 w-full p-2 border border-gray-300 rounded-md"
 				></textarea>
 
-				<label>Status</label>
-				<select
-					name="status"
-					value={leave.status}
-					onChange={handleChange}
-					className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-				>
-					<option value="pending">Pending</option>
-					<option value="approved">Approved</option>
-					<option value="rejected">Rejected</option>
-				</select>
-
 				<button
 					type="submit"
 					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
@@ -147,7 +129,7 @@ const AdminEditLeave = () => {
 				<button
 					type="button"
 					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate("/admin-dashboard/leaves")}
+					onClick={() => navigate("/employee-dashboard/leaves")}
 				>
 					Cancel
 				</button>

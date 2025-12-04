@@ -36,10 +36,10 @@ export const LeaveButtons = ({id, handleDelete, status}) => {
 	const navigate = useNavigate();
 
 	return (
-		<> {status !== "pending" ? <></> :
+		<> {status !== "pending" ? <>None</> :
 			<div className="flex space-x-3 whitespace-nowrap">
 				<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-					onClick={() => navigate(`/admin-dashboard/leaves/edit/${id}`)}>
+					onClick={() => navigate(`/employee-dashboard/leaves/edit/${id}`)}>
 						Edit
 				</button>
 			</div>

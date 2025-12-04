@@ -23,6 +23,7 @@ import EditCustomer from './components/customer/EditCustomer';
 import LeavesList from './components/leave/LeavesList';
 import AdminLeavesList from './components/leave/AdminLeavesList';
 import AddLeave from './components/leave/AddLeave';
+import EditLeave from './components/leave/EditLeave';
 import AdminAddLeave from './components/leave/AdminAddLeave';
 import AdminEditLeave from './components/leave/AdminEditLeave';
 
@@ -87,6 +88,7 @@ const App = () => {
 					{/* Leaves */}
 					<Route path="/employee-dashboard/leaves" element={<LeavesList/>}></Route>
 					<Route path="/employee-dashboard/leaves/add" element={<AddLeave/>}></Route>
+					<Route path="/employee-dashboard/leaves/edit/:id" element={<EditLeave/>}></Route>
 				</Route>
 
 				<Route path = "/login" element={<Login/>}/>
