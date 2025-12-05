@@ -91,4 +91,19 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.MapControllers();
 
+app.MapGet("api/summary", async (EMSContext db) =>
+{
+	var summary = new
+	{
+		Members = await db.Users.CountAsync(),
+		Books = await db.Books.CountAsync(),
+		Leaves = await db.Leaves.CountAsync(),
+		Customers = await db.Customers.CountAsync(),
+		Payrolls = await db.Payrolls.CountAsync(),
+		InStock = await db.Storages.SumAsync(b => b.Quantity),
+	};
+
+	return Results.Ok(summary);
+});
+
 app.Run();
