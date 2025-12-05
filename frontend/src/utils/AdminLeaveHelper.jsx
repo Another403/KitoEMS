@@ -32,13 +32,21 @@ export const AdminLeaveColumns = [
 		selector : (row) => row.reason,
 	},
 	{
-		name: 'Actions',
-		cell : (row) => row.actions,
+    name: 'Actions',
+    cell: (row) => (
+			<AdminLeaveButtons 
+				id={row.id}
+				status={row.status}
+				handleDelete={row.handleDelete}
+				handleApprove={row.handleApprove}
+				handleReject={row.handleReject}
+			/>
+		),
 		minWidth: "300px"
 	}
 ]
 
-export const AdminLeaveButtons = ({id, handleDelete}) => {
+export const AdminLeaveButtons = ({id, handleDelete, handleApprove, handleReject, status}) => {
 	const navigate = useNavigate();
 
 	return (
@@ -51,6 +59,18 @@ export const AdminLeaveButtons = ({id, handleDelete}) => {
 				onClick={() => handleDelete(id)}>
 					Delete
 			</button>
+			<>{status === "approved" ? <></> :
+				<button className="px-3 py-1 bg-green-600 text-white hover:cursor-pointer hover:bg-green-800"
+					onClick={() => handleApprove(id)}>
+						Approve
+				</button>
+			}</>
+			<>{status === "rejected" ? <></> :
+				<button className="px-3 py-1 bg-yellow-600 text-white hover:cursor-pointer hover:bg-yellow-800"
+					onClick={() => handleReject(id)}>
+						Reject
+				</button>
+			}</>
 		</div>
 	)
 }

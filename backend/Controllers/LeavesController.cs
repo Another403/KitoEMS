@@ -118,6 +118,38 @@ public class LeavesController : Controller
 		return Ok(leave);
 	}
 
+	[HttpPut("approve/{id}")]
+	public async Task<IActionResult> ApproveLeave(Guid id)
+	{
+		var leave = await _context.Leaves.FindAsync(id);
+
+		if (leave == null)
+		{
+			return NotFound(new { message = "leave not found!" });
+		}
+
+		leave.Status = "approved";
+		await _context.SaveChangesAsync();
+
+		return Ok(leave);
+	}
+
+	[HttpPut("reject/{id}")]
+	public async Task<IActionResult> RejectLeave(Guid id)
+	{
+		var leave = await _context.Leaves.FindAsync(id);
+
+		if (leave == null)
+		{
+			return NotFound(new { message = "leave not found!" });
+		}
+
+		leave.Status = "rejected";
+		await _context.SaveChangesAsync();
+
+		return Ok(leave);
+	}
+
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeleteLeave(Guid id)
 	{

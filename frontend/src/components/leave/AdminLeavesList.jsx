@@ -35,7 +35,6 @@ const AdminLeavesList = () => {
 
 		  			reason: leave.reason,
 		  			status: leave.status,
-					actions: (<AdminLeaveButtons id={leave.id} handleDelete={handleDelete}/>)
 				}));
 				setLeaves(data);
 			}
@@ -43,6 +42,29 @@ const AdminLeavesList = () => {
 			console.log(error);
 		} finally {
 			setLeavesLoading(false);
+		}
+	};
+
+	const fetchLeavesDirect = async () => {
+		try {
+			const res = await api.get('/Leaves');
+			return res.data.map((leave) => ({
+				id: leave.id,
+				userId: leave.userId,
+				user: leave.user,
+				startDate: new Date(leave.startDate).toLocaleDateString('en-GB'),
+				endDate: new Date(leave.endDate).toLocaleDateString('en-GB'),
+
+				_startDate: new Date(leave.startDate),
+				_endDate: new Date(leave.endDate),
+
+				reason: leave.reason,
+				status: leave.status,
+				actions: null
+			}));
+		} catch (err) {
+			console.log(err);
+			return [];
 		}
 	};
 
@@ -60,6 +82,30 @@ const AdminLeavesList = () => {
 			await fetchLeaves();
 		}
 	}
+
+	const handleApprove = async (id) => {
+		setLeaves(prev =>
+			prev.map(l => l.id === id ? { ...l, status: "approved" } : l)
+		);
+		try {
+			await api.put(`/Leaves/approve/${id}`);
+		} catch (error) {
+			console.log(error);
+			setLeaves(await fetchLeavesDirect());
+		}
+	};
+
+	const handleReject = async (id) => {
+		setLeaves(prev =>
+			prev.map(l => l.id === id ? { ...l, status: "rejected" } : l)
+		);
+		try {
+			await api.put(`/Leaves/reject/${id}`);
+		} catch (error) {
+			console.log(error);
+			setLeaves(await fetchLeavesDirect());
+		}
+	};
 
 	const filteredLeaves = leaves
 		.filter((leave) =>
@@ -113,7 +159,12 @@ const AdminLeavesList = () => {
 				<div className='mt-5'>
 					<DataTable
 						columns={AdminLeaveColumns}
-						data={filteredLeaves}
+						data={filteredLeaves.map(l => ({
+							...l,
+							handleDelete,
+							handleApprove,
+							handleReject
+						}))}
 						pagination
 					/>
 				</div>
