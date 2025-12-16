@@ -14,7 +14,8 @@ const AdminAddLeave = () => {
 		startDate: new Date(),
 		endDate: new Date(),
 		reason: "no reason",
-		status: "pending"
+		status: "pending",
+		leaveType: "Multiple days"
 	});
 
 	const [users, setUsers] = useState([]);
@@ -67,7 +68,11 @@ const AdminAddLeave = () => {
 	}
 
 	const handleStartDate = (date) => {
-		setLeave({...leave, startDate: date});
+		setLeave(prev => ({
+			...prev,
+			startDate: date,
+			endDate: prev.leaveType === "Partial" ? date : prev.endDate
+		}));
 	};
 
 	const handleEndDate = (date) => {
@@ -112,6 +117,7 @@ const AdminAddLeave = () => {
 							onChange={handleEndDate}
 							customInput={<CustomInput />}
 							className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+							disabled={leave.leaveType === 'Partial'}
 						/>
 					</div>
 
@@ -140,6 +146,19 @@ const AdminAddLeave = () => {
 						<option value="pending">Pending</option>
 						<option value="approved">Approved</option>
 						<option value="rejected">Rejected</option>
+					</select>
+				</div>
+
+				<div>
+					<label>Leave type</label>
+					<select
+						name="leaveType"
+						value={leave.leaveType}
+						onChange={handleChange}
+						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+					>
+						<option value="Partial">Partial</option>
+						<option value="Multiple days">Multiple days</option>
 					</select>
 				</div>
 

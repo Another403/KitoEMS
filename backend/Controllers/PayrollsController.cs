@@ -11,7 +11,7 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
-public class PayrollsController : Controller
+public class PayrollsController : ControllerBase
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;

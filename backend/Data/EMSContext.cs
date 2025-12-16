@@ -2,6 +2,7 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace backend.Data;
 
@@ -29,10 +30,22 @@ public class EMSContext : IdentityDbContext
 			.WithMany()
 			.HasForeignKey(p => p.UserId)
 			.OnDelete(DeleteBehavior.Cascade);
-	#endregion
 
-	#region DECIMAL_PRECISION
-	builder.Entity<AppUser>()
+		builder.Entity<Receipt>()
+			.HasOne(r => r.Customer)
+			.WithMany()
+			.HasForeignKey(r => r.CustomerPhone)
+			.HasPrincipalKey(c => c.PhoneNumber);
+
+		builder.Entity<Receipt>()
+			.HasMany(r => r.Items)
+			.WithOne(i => i.Receipt)
+			.HasForeignKey(i => i.ReceiptId)
+			.OnDelete(DeleteBehavior.Cascade);
+		#endregion
+
+		#region DECIMAL_PRECISION
+		builder.Entity<AppUser>()
 				.Property(b => b.Salary)
 				.HasPrecision(18, 2);
 
@@ -63,6 +76,14 @@ public class EMSContext : IdentityDbContext
 		builder.Entity<ReturnDetail>()
 			.Property(rd => rd.Refund)
 			.HasPrecision(18, 2);
+
+		builder.Entity<Receipt>()
+		.Property(r => r.Total)
+		.HasPrecision(18, 2);
+
+		builder.Entity<ReceiptItem>()
+			.Property(ri => ri.UnitPrice)
+			.HasPrecision(18, 2);
 		#endregion
 	}
 
@@ -78,4 +99,6 @@ public class EMSContext : IdentityDbContext
 	public DbSet<StockImport> StockImports { get; set; }
 	public DbSet<Storage> Storages { get; set; }
 	public DbSet<WorkSchedules> WorkSchedules { get; set; }
+	public DbSet<Receipt> Receipts { get; set; }
+	public DbSet<ReceiptItem> ReceiptItems { get; set; }
 }

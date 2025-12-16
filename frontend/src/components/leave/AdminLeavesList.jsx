@@ -28,6 +28,7 @@ const AdminLeavesList = () => {
 					user: leave.user,
 		  			startDate: new Date(leave.startDate).toLocaleDateString('en-GB'),
 		  			endDate: new Date(leave.endDate).toLocaleDateString('en-GB'),
+					leaveType: leave.leaveType,
 
 					// keep originals for filtering
 					_startDate: new Date(leave.startDate),
@@ -54,6 +55,7 @@ const AdminLeavesList = () => {
 				user: leave.user,
 				startDate: new Date(leave.startDate).toLocaleDateString('en-GB'),
 				endDate: new Date(leave.endDate).toLocaleDateString('en-GB'),
+				leaveType: leave.leaveType,
 
 				_startDate: new Date(leave.startDate),
 				_endDate: new Date(leave.endDate),

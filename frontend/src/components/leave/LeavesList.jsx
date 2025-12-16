@@ -7,7 +7,7 @@ import { api } from '../../api.jsx';
 import { LeaveColumns, LeaveButtons } from '../../utils/LeaveHelper';
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
-const AdminLeavesList = () => {
+const LeavesList = () => {
 	const { user } = useAuth();
 
 	const [leaves, setLeaves] = useState([]);
@@ -114,4 +114,4 @@ const AdminLeavesList = () => {
 	)
 }
 
-export default AdminLeavesList
+export default LeavesList

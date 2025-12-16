@@ -26,6 +26,10 @@ export const LeaveColumns = [
 		selector : (row) => row.reason,
 	},
 	{
+		name: 'Leave type',
+		selector: (row) => row.leaveType,
+	},
+	{
 		name: 'Actions',
 		cell : (row) => row.actions,
 		minWidth: "300px"

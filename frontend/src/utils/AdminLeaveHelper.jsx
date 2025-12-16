@@ -32,6 +32,10 @@ export const AdminLeaveColumns = [
 		selector : (row) => row.reason,
 	},
 	{
+		name: 'Leave type',
+		selector: (row) => row.leaveType,
+	},
+	{
     name: 'Actions',
     cell: (row) => (
 			<AdminLeaveButtons 

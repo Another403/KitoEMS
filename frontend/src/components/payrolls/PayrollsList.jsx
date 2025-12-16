@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
 import { api } from '../../api.jsx';
-import { PayrollColumns, PayrollButtons } from '../../utils/PayrollHelper';
+import { PayrollColumns, PayrollButtons } from '../../utils/PayrollHelper.jsx';
 import autoprefixer from 'autoprefixer';
 
 const PayrollsList = () => {

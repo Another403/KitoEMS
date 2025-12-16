@@ -9,7 +9,7 @@ namespace backend.Controllers;
 [Route("api/[controller]")]
 [ApiController]
 //[Authorize]
-public class LeavesController : Controller
+public class LeavesController : ControllerBase
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;
@@ -68,7 +68,8 @@ public class LeavesController : Controller
 			StartDate = rawLeave.StartDate,
 			EndDate = rawLeave.EndDate,
 			Reason = rawLeave.Reason,
-			Status = rawLeave.Status
+			Status = rawLeave.Status,
+			LeaveType = rawLeave.LeaveType,
 		};
 
 		try
@@ -105,6 +106,7 @@ public class LeavesController : Controller
 		leave.EndDate = rawLeave.EndDate;
 		leave.Reason = rawLeave.Reason;
 		leave.Status = rawLeave.Status;
+		leave.LeaveType = rawLeave.LeaveType;
 
 		try
 		{

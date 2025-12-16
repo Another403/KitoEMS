@@ -26,6 +26,10 @@ import AddLeave from './components/leave/AddLeave';
 import EditLeave from './components/leave/EditLeave';
 import AdminAddLeave from './components/leave/AdminAddLeave';
 import AdminEditLeave from './components/leave/AdminEditLeave';
+import AddReceipt from './components/receipt/AddReceipt';
+import ReceiptList from './components/receipt/ReceiptsList';
+import ViewReceipt from './components/receipt/ViewReceipt';
+import AddReceiptItem from './components/receipt/AddReceiptItem';
 
 const App = () => {
 	return (
@@ -67,6 +71,12 @@ const App = () => {
 					<Route path="/admin-dashboard/leaves" element={<AdminLeavesList/>}></Route>
 					<Route path="/admin-dashboard/leaves/add" element={<AdminAddLeave/>}></Route>
 					<Route path="/admin-dashboard/leaves/edit/:id" element={<AdminEditLeave/>}></Route>
+
+					{/* Receipts */}
+					<Route path="/admin-dashboard/receipts" element={<ReceiptList/>}></Route>
+					<Route path="/admin-dashboard/receipts/add" element={<AddReceipt/>}></Route>
+					<Route path="/admin-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
+					<Route path="/admin-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
 				</Route>
 
 				{/* EMPLOYEE DASHBOARD */}
@@ -89,6 +99,9 @@ const App = () => {
 					<Route path="/employee-dashboard/leaves" element={<LeavesList/>}></Route>
 					<Route path="/employee-dashboard/leaves/add" element={<AddLeave/>}></Route>
 					<Route path="/employee-dashboard/leaves/edit/:id" element={<EditLeave/>}></Route>
+
+					{/* Storage */}
+					<Route path="/employee-dashboard/storage" element={<BooksList/>}></Route>
 				</Route>
 
 				<Route path = "/login" element={<Login/>}/>

@@ -2,11 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 
-import { api } from '../../api.jsx';
+import { api } from '../../api';
 import { BookColumns, BookButtons } from '../../utils/BookHelper';
 import autoprefixer from 'autoprefixer';
+import { useAuth } from '../../contexts/AuthContext';
 
 const BooksList = () => {
+	const { user } = useAuth();
+
 	const [books, setBooks] = useState([]);
 	const [booksLoading, setBooksLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
@@ -69,14 +72,16 @@ const BooksList = () => {
 						className='px-4 py-0.5 border'>
 					</input>
 					<div className='flex space-x-2'>
-						<Link to="/admin-dashboard/storage/import" 
-							className='px-4 py-1 bg-teal-600 rounded text-white'>
-								Import
-						</Link>
-						<Link to="/admin-dashboard/add-book" 
-							className='px-4 py-1 bg-teal-600 rounded text-white'>
-								Add new book
-						</Link>
+						{(user.userRole === 'admin' || user.userRole === 'storage_manager') &&
+							(<Link to="/admin-dashboard/storage/import" 
+								className='px-4 py-1 bg-teal-600 rounded text-white'>
+									Import
+							</Link>)}
+						{(user.userRole === 'admin' || user.userRole === 'storage_manager') &&
+							(<Link to="/admin-dashboard/add-book" 
+								className='px-4 py-1 bg-teal-600 rounded text-white'>
+									Add new book
+							</Link>)}
 					</div>
 				</div>
 				<div className='mt-5'>

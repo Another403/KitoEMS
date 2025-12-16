@@ -25,6 +25,11 @@ const EmployeeSidebar = () => {
 					<FaUser/>
 					<span>Profile</span>
 				</NavLink>
+				<NavLink to='/employee-dashboard/storage'
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
+					<FaLayerGroup/>
+					<span>Storage</span>
+				</NavLink>
 				<NavLink to='/employee-dashboard/payrolls'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaRegMoneyBillAlt/>
