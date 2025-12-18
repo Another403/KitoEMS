@@ -576,6 +576,11 @@
         "Name": "id",
         "Type": "System.Guid",
         "IsRequired": true
+      },
+      {
+        "Name": "reject",
+        "Type": "backend.Models.Dto.RejectLeaveRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

@@ -31,6 +31,7 @@ import ReceiptList from './components/receipt/ReceiptsList';
 import ViewReceipt from './components/receipt/ViewReceipt';
 import AddReceiptItem from './components/receiptItem/AddReceiptItem';
 import EditReceiptItem from './components/receiptItem/EditReceiptItem';
+import RejectLeave from './components/leave/RejectLeave';
 
 const App = () => {
 	return (
@@ -72,6 +73,7 @@ const App = () => {
 					<Route path="/admin-dashboard/leaves" element={<AdminLeavesList/>}></Route>
 					<Route path="/admin-dashboard/leaves/add" element={<AdminAddLeave/>}></Route>
 					<Route path="/admin-dashboard/leaves/edit/:id" element={<AdminEditLeave/>}></Route>
+					<Route path="/admin-dashboard/leaves/:id/reject" element={<RejectLeave/>}></Route>
 
 					{/* Receipts */}
 					<Route path="/admin-dashboard/receipts" element={<ReceiptList/>}></Route>

@@ -14,8 +14,10 @@ const AdminEditLeave = () => {
 		userId: "",
 		startDate: new Date(),
 		endDate: new Date(),
-		reason: "",
-		status: "pending"
+		reason: "no reason",
+		status: "pending",
+		leaveType: "Multiple days",
+		rejectionReason: ""
 	});
 
 	const [users, setUsers] = useState([]);
@@ -39,7 +41,8 @@ const AdminEditLeave = () => {
 					startDate: new Date(l.startDate),
 					endDate: new Date(l.endDate),
 					reason: l.reason,
-					status: l.status
+					status: l.status,
+					rejectionReason: l.rejectionReason
 				});
 			} catch (err) {
 				console.log(err);
@@ -137,6 +140,20 @@ const AdminEditLeave = () => {
 					<option value="approved">Approved</option>
 					<option value="rejected">Rejected</option>
 				</select>
+
+				{/* REJECTION REASON */}
+				{ leave.reason === 'rejected' && (
+				<div>
+					<label>Reason</label>
+					<textarea
+						type="text"
+						name="rejectionReason"
+						value={leave.rejectionReason}
+						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+						onChange={handleChange}
+					/>
+				</div>
+				)}
 
 				<button
 					type="submit"

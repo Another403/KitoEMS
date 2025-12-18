@@ -10,4 +10,5 @@ public class Leave
 	public string Reason { get; set; } = null!;
 	public string Status { get; set; } = null!;
 	public string LeaveType { get; set; } = null!;
+	public string? RejectionReason { get; set; }
 }

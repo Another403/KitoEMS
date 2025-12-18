@@ -4,6 +4,7 @@ import SummaryCard from './SummaryCard';
 
 import { FaUser, FaBookOpen, FaReceipt, FaBook, FaMoneyBill, FaCalendar, FaUserFriends } from 'react-icons/fa';
 import { api } from '../../api';
+import DashboardSkeleton from '../skeletons/DashboardSkeleton';
 
 const AdminSummary = () => {
 	const [data, setData] = useState({});
@@ -26,7 +27,7 @@ const AdminSummary = () => {
 	}, []);
 
 	return (
-		<>{ loading ? <div>Loading...</div> :
+		<>{ loading ? <DashboardSkeleton/> :
 			<div className='p-6'>
 				<h4 className='class-2xl font-bold'>Overview</h4>
 				<div className='grid grid-cols-1 md:grid-cols-3 gap-4 mt-6'>

@@ -6,6 +6,7 @@ import { api } from '../../api';
 import { BookColumns, BookButtons } from '../../utils/BookHelper';
 import autoprefixer from 'autoprefixer';
 import { useAuth } from '../../contexts/AuthContext';
+import ListSkeleton from '../skeletons/ListSkeleton';
 
 const BooksList = () => {
 	const { user } = useAuth();
@@ -61,7 +62,7 @@ const BooksList = () => {
 	}, []);
 
   	return (
-		<>{booksLoading ? <div>Loading...</div> :
+		<>{booksLoading ? <ListSkeleton/> :
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Storage</h3>

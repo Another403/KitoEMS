@@ -15,7 +15,8 @@ const AdminAddLeave = () => {
 		endDate: new Date(),
 		reason: "no reason",
 		status: "pending",
-		leaveType: "Multiple days"
+		leaveType: "Multiple days",
+		rejectionReason: ""
 	});
 
 	const [users, setUsers] = useState([]);
@@ -148,6 +149,20 @@ const AdminAddLeave = () => {
 						<option value="rejected">Rejected</option>
 					</select>
 				</div>
+
+				{/* REJECTION REASON */}
+				{ leave.status === 'rejected' && (
+				<div>
+					<label>Rejection reason</label>
+					<textarea
+						type="text"
+						name="rejectionReason"
+						value={leave.rejectionReason}
+						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+						onChange={handleChange}
+					/>
+				</div>
+				)}
 
 				<div>
 					<label>Leave type</label>

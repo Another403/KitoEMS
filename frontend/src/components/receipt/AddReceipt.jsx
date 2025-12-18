@@ -60,14 +60,40 @@ const AddReceipt = () => {
 		e.preventDefault();
 
 		try {
-			const res = await api.post("/Receipts", receipt);
+			var receiptPayload = { ...receipt };
+
+			if (customerType === "Create new member") {
+				const customerResponse = await api.post("/Customers", newCustomer);
+
+				if (customerResponse.status !== 200) {
+				return;
+				}
+
+				receiptPayload = { ...receiptPayload, customerPhone: newCustomer.phoneNumber };
+			}
+
+			if (customerType === "Member" && !receiptPayload.customerPhone) {
+				return;
+			}
+
+			const res = await api.post("/Receipts", receiptPayload);
 
 			if (res.status === 200)
 				navigate(`/admin-dashboard/receipts/view/${res.data.id}`);
-		} 
-		catch (error) {
+		} catch (error) {
 			console.log(error);
 		}
+	}
+	
+	//add new customer
+	const [newCustomer, setNewCustomer] = useState({});
+	const handleNewCustomerChange = (e) => {
+		const { name, value } = e.target;
+
+		setNewCustomer(prev => ({
+			...prev,
+			[name]: value
+		}));
 	}
 
 	return (
@@ -84,12 +110,13 @@ const AddReceipt = () => {
 					>
 						<option value="Walk in">Walk in</option>
 						<option value="Member">Member</option>
+						<option value="Create new member">Create new member</option>
 					</select>
 				</div>
 				
 				
-				{/* Customer select */}
-				{ customerType === 'Walk in' ? <> </> :
+				{/* Customer options */}
+				{ customerType === 'Member' && (
 					<div>
 						<label>Customer</label>
 						<Select
@@ -100,7 +127,35 @@ const AddReceipt = () => {
 							isSearchable
 						/>
 					</div>
-				}
+				)}
+
+				{customerType === 'Create new member' && (
+					<div className='mt-4'>
+						<h3 className='text-lg font-semibold mb-2'>New customer details</h3>
+						<div className='mb-4'>
+						<label className='text-sm font-medium text-gray-700'>Name</label>
+						<input
+							type="text"
+							name="name"
+							onChange={handleNewCustomerChange}
+							placeholder='Enter customer name'
+							className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+							required
+						/>
+						</div>
+						<div className='mb-4'>
+						<label className='text-sm font-medium text-gray-700'>Phone Number</label>
+						<input
+							type="text"
+							name="phoneNumber"
+							onChange={handleNewCustomerChange}
+							placeholder='Enter phone number'
+							className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+							required
+						/>
+						</div>
+					</div>
+				)}
 
 				{/* SUBMIT */}
 				<button

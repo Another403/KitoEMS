@@ -1005,6 +1005,25 @@
             }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectLeaveRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectLeaveRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/RejectLeaveRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1859,6 +1878,10 @@
           "leaveType": {
             "type": "string",
             "nullable": true
+          },
+          "rejectionReason": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -2002,6 +2025,16 @@
         "type": "object",
         "properties": {
           "refreshToken": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RejectLeaveRequest": {
+        "type": "object",
+        "properties": {
+          "rejectionReason": {
             "type": "string",
             "nullable": true
           }

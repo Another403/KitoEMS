@@ -36,6 +36,7 @@ const AdminLeavesList = () => {
 		  			_endDate: new Date(leave.endDate),
 
 		  			reason: leave.reason,
+					rejectionReason: leave.rejectionReason,
 		  			status: leave.status,
 				}));
 				setLeaves(data);
@@ -63,6 +64,7 @@ const AdminLeavesList = () => {
 
 				reason: leave.reason,
 				status: leave.status,
+				rejectionReason: leave.rejectionReason,
 				actions: null
 			}));
 		} catch (err) {

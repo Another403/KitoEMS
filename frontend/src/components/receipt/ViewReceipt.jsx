@@ -28,6 +28,7 @@ const ViewReceipt = () => {
 				customerName: res.data.customer.name,
 				total: res.data.total,
 				employee: res.data.employee.userName,
+				employeeId: res.data.employeeId
 			});
 
 			console.log(res.data);
@@ -38,7 +39,7 @@ const ViewReceipt = () => {
 				author: item.book.author,
 				price: item.unitPrice,
 				subTotal: item.subTotal,
-				actions: (<ReceiptItemButtons id={item.id} handleDelete={handleDelete} employeeId={item.receipt.employeeId}/>)
+				actions: (<ReceiptItemButtons id={item.id} handleDelete={handleDelete} employeeId={res.data.employeeId}/>)
 			}));
 
 			setItems(data);

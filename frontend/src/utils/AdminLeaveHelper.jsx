@@ -24,12 +24,16 @@ export const AdminLeaveColumns = [
 		selector : (row) => row.endDate,
 	},
 	{
+		name: 'Reason',
+		selector : (row) => row.reason,
+	},
+	{
 		name: 'Status',
 		selector : (row) => row.status,
 	},
 	{
-		name: 'Reason',
-		selector : (row) => row.reason,
+		name: 'Rejection reason',
+		selector : (row) => row.rejectionReason ?? "none"
 	},
 	{
 		name: 'Leave type',
@@ -71,7 +75,8 @@ export const AdminLeaveButtons = ({id, handleDelete, handleApprove, handleReject
 			}</>
 			<>{status === "rejected" ? <></> :
 				<button className="px-3 py-1 bg-yellow-600 text-white hover:cursor-pointer hover:bg-yellow-800"
-					onClick={() => handleReject(id)}>
+					//onClick={() => handleReject(id)}
+					onClick={() => navigate(`/admin-dashboard/leaves/${id}/reject`)}>
 						Reject
 				</button>
 			}</>

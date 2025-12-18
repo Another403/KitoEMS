@@ -99,20 +99,24 @@ export const ReceiptButtons = ({id, handleDelete}) => {
 
 export const ReceiptItemButtons = ({id, handleDelete, employeeId}) => {
 	const navigate = useNavigate();
-	const {user} = useAuth();
+	const { user } = useAuth();
+
+	//console.log(`${user.userRole}, ${user.id}, ${employeeId}`);
 
 	return (
 		<div className="flex space-x-3 whitespace-nowrap">
-			{ user.role !== 'admin' && user.id !== employeeId ? <></> :
+			{ user.userRole !== 'admin' && user.id !== employeeId ? <></> :
+			<>
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
 				onClick={() => navigate(`/admin-dashboard/receipts/item/edit/${id}`)}>
 					Edit
 			</button>
-			}
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
 				onClick={() => handleDelete(id)}>
 					Delete
 			</button>
+			</>
+			}
 		</div>
 	)
 }

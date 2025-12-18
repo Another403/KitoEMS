@@ -1,5 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
+using backend.Models.Dto;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -70,6 +71,7 @@ public class LeavesController : ControllerBase
 			Reason = rawLeave.Reason,
 			Status = rawLeave.Status,
 			LeaveType = rawLeave.LeaveType,
+			RejectionReason = rawLeave.RejectionReason,
 		};
 
 		try
@@ -107,6 +109,7 @@ public class LeavesController : ControllerBase
 		leave.Reason = rawLeave.Reason;
 		leave.Status = rawLeave.Status;
 		leave.LeaveType = rawLeave.LeaveType;
+		leave.RejectionReason = rawLeave.RejectionReason;
 
 		try
 		{
@@ -137,7 +140,7 @@ public class LeavesController : ControllerBase
 	}
 
 	[HttpPut("reject/{id}")]
-	public async Task<IActionResult> RejectLeave(Guid id)
+	public async Task<IActionResult> RejectLeave(Guid id, [FromBody] RejectLeaveRequest reject)
 	{
 		var leave = await _context.Leaves.FindAsync(id);
 
@@ -146,6 +149,7 @@ public class LeavesController : ControllerBase
 			return NotFound(new { message = "leave not found!" });
 		}
 
+		leave.RejectionReason = reject.RejectionReason;
 		leave.Status = "rejected";
 		await _context.SaveChangesAsync();
 

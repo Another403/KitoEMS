@@ -39,6 +39,7 @@ const LeavesList = () => {
 
 		  			reason: leave.reason,
 		  			status: leave.status,
+					rejectionReason: leave.rejectionReason,
 					actions: (<LeaveButtons id={leave.id} handleDelete={handleDelete} status={leave.status}/>)
 				}));
 				setLeaves(data);

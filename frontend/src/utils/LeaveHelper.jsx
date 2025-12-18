@@ -22,6 +22,10 @@ export const LeaveColumns = [
 		selector : (row) => row.status,
 	},
 	{
+		name: 'Rejection reason',
+		selector : (row) => row.rejectionReason || 'Not provided',
+	},
+	{
 		name: 'Reason',
 		selector : (row) => row.reason,
 	},
