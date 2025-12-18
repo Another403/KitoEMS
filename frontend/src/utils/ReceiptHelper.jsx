@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import { api } from '../api.jsx';
+import { useAuth } from "../contexts/AuthContext";
 
 export const ReceiptColumns = [
 	{
@@ -22,7 +23,7 @@ export const ReceiptColumns = [
 		selector : (row) => row.customerNumber,
 	},
 	{
-		name: 'Points eaned',
+		name: 'Points earned',
 		selector : (row) => row.pointsEarned,
         sortable: true,
 	},
@@ -88,6 +89,26 @@ export const ReceiptButtons = ({id, handleDelete}) => {
 				onClick={() => navigate(`/admin-dashboard/receipts/view/${id}`)}>
 					View
 			</button>
+			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
+				onClick={() => handleDelete(id)}>
+					Delete
+			</button>
+		</div>
+	)
+}
+
+export const ReceiptItemButtons = ({id, handleDelete, employeeId}) => {
+	const navigate = useNavigate();
+	const {user} = useAuth();
+
+	return (
+		<div className="flex space-x-3 whitespace-nowrap">
+			{ user.role !== 'admin' && user.id !== employeeId ? <></> :
+			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
+				onClick={() => navigate(`/admin-dashboard/receipts/item/edit/${id}`)}>
+					Edit
+			</button>
+			}
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
 				onClick={() => handleDelete(id)}>
 					Delete

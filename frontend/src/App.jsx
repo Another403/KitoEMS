@@ -29,7 +29,8 @@ import AdminEditLeave from './components/leave/AdminEditLeave';
 import AddReceipt from './components/receipt/AddReceipt';
 import ReceiptList from './components/receipt/ReceiptsList';
 import ViewReceipt from './components/receipt/ViewReceipt';
-import AddReceiptItem from './components/receipt/AddReceiptItem';
+import AddReceiptItem from './components/receiptItem/AddReceiptItem';
+import EditReceiptItem from './components/receiptItem/EditReceiptItem';
 
 const App = () => {
 	return (
@@ -77,6 +78,7 @@ const App = () => {
 					<Route path="/admin-dashboard/receipts/add" element={<AddReceipt/>}></Route>
 					<Route path="/admin-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
 					<Route path="/admin-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
+					<Route path="/admin-dashboard/receipts/item/edit/:id" element={<EditReceiptItem/>}></Route>
 				</Route>
 
 				{/* EMPLOYEE DASHBOARD */}

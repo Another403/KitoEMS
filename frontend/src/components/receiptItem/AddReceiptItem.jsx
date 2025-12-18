@@ -64,6 +64,8 @@ const AddReceiptItem = () => {
 		<div className='max-w-3xl mx-auto mt-10 bg-white p-8 rounded-md shadow-md w-100'>
 			<h2 className='text-2xl font-bold mb-6'>Add receipt item</h2>
 			<form onSubmit={handleAddReceiptItem}>
+
+				
 				{/* ITEM */}
 				<div>
 					<label>Book</label>

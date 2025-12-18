@@ -5,7 +5,8 @@ import DatePicker from 'react-datepicker';
 
 import { api } from '../../api.jsx';
 import { AdminLeaveColumns, AdminLeaveButtons } from '../../utils/AdminLeaveHelper';
-import CustomInput from '../CustomInput.jsx';
+import CustomInput from '../CustomInput';
+import ListSkeleton from '../skeletons/ListSkeleton';
 
 const AdminLeavesList = () => {
 	const [leaves, setLeaves] = useState([]);
@@ -121,7 +122,7 @@ const AdminLeavesList = () => {
 		);
 
 	return (
-		<> { leavesLoading ? <div>Loading leaves...</div> :
+		<> { leavesLoading ? <ListSkeleton/> : 
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Leaves</h3>

@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import DatePicker from 'react-datepicker';
+import Skeleton from 'react-loading-skeleton';
 
 import { api } from '../../api.jsx';
 import { LeaveColumns, LeaveButtons } from '../../utils/LeaveHelper';
-import { useAuth } from '../../contexts/AuthContext.jsx';
+import { useAuth } from '../../contexts/AuthContext';
+import ListSkeleton from '../skeletons/ListSkeleton';
 
 const LeavesList = () => {
 	const { user } = useAuth();
@@ -72,7 +74,7 @@ const LeavesList = () => {
 		);
 
 	return (
-		<> { leavesLoading ? <div>Loading leaves...</div> :
+		<> { leavesLoading ?  <ListSkeleton/> :
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Leaves</h3>

@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../../api';
 import CustomInput from '../CustomInput';
 
-const AddCustomer = () => {
+const AddCustomer = ({phoneNumber}) => {
 	const [customer, setCustomer] = useState({
 		name: "",
-		phoneNumber: "",
+		phoneNumber: phoneNumber,
 		points: 0
 	});
 

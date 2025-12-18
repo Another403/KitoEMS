@@ -75,7 +75,17 @@ public class ReceiptsController : ControllerBase
 	[HttpGet("items")]
 	public async Task<ActionResult<List<ReceiptItem>>> GetAllItems()
 	{
-		return Ok(await _context.ReceiptItems.ToListAsync());
+		return Ok(await _context.ReceiptItems
+			.Include(r => r.Book)
+			.ToListAsync());
+	}
+
+	[HttpGet("items/{id}")]
+	public async Task<ActionResult<ReceiptItem>> GetItemById(Guid id)
+	{
+		return Ok(await _context.ReceiptItems
+			.Include(r => r.Book)
+			.FirstOrDefaultAsync(r => r.Id == id));
 	}
 
 	[HttpPost]
@@ -93,8 +103,13 @@ public class ReceiptsController : ControllerBase
 	}
 
 	[HttpPost("{id}/items")]
-	public async Task<IActionResult> AddItemToReceipt(Guid id,	[FromBody] ReceiptItem newItem)
+	public async Task<IActionResult> AddItemToReceipt(Guid id, [FromBody] ReceiptItem newItem)
 	{
+		if (newItem == null || newItem.Quantity < 0)
+		{
+			return BadRequest();
+		}
+
 		try
 		{
 			var receipt = await _service.AddItemToReceiptAsync(id, newItem);
@@ -113,19 +128,51 @@ public class ReceiptsController : ControllerBase
 		}
 	}
 
+	[HttpPut("items/{id}")]
+	public async Task<IActionResult> UpdateReceiptItem(Guid id, [FromBody] ReceiptItem newItem)
+	{
+		if (newItem == null || newItem.Quantity < 0)
+		{
+			return BadRequest();
+		}
+
+		try
+		{
+			var item = await _service.UpdateReceiptItemAsync(id, newItem);
+
+			return Ok(item);
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
+	}
+
 	[HttpDelete("{id}")]
 	public async Task<IActionResult> DeleteReceipt(Guid id)
 	{
-		var receipt = await _context.Receipts.FindAsync(id);
-
-		if (receipt == null)
+		try
 		{
-			return NotFound(new { message = "receipt not found!" });
+			await _service.DeleteReceiptAsync(id);
+			return Ok(new { success = true });
 		}
+		catch (Exception ex)
+		{
+			return BadRequest(ex.Message);
+		}
+	}
 
-		_context.Receipts.Remove(receipt);
-		await _context.SaveChangesAsync();
-
-		return Ok(receipt);
+	[HttpDelete("items/{id}")]
+	public async Task<IActionResult> DeleteReceiptItem(Guid id)
+	{
+		try
+		{
+			await _service.DeleteReceiptItemAsync(id);
+			return Ok(new { success = true });
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(ex.Message);
+		}
 	}
 }

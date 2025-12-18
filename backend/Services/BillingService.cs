@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using backend.Models.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using System.ComponentModel.DataAnnotations;
 
 namespace backend.Services;
 
@@ -23,6 +25,12 @@ public class BillingService
 	{
 		if (TotalAmount <= 0) return 0;
 		return (int)(Math.Floor(TotalAmount / _pointsPerAmount));
+	}
+
+	public void CalculateReceipt(Receipt receipt)
+	{
+		receipt.Total = receipt.Items.Sum(i => i.Quantity * i.UnitPrice);
+		receipt.PointsEarned = CalculatePoints(receipt.Total);
 	}
 
 	public async Task<Receipt> CreateReceiptAsync(CreateReceiptModel createReceiptModel)
@@ -187,9 +195,138 @@ public class BillingService
 			receipt.Items.Add(item);
 		}
 		receipt.Total += unitPrice * newItem.Quantity;
+
+		var prevPoint = receipt.PointsEarned;
+
+		receipt.PointsEarned = CalculatePoints(receipt.Total);
 		storage.Quantity -= newItem.Quantity;
+
+		var customer = await _context.Customers
+			.FirstOrDefaultAsync(customer => customer.PhoneNumber == receipt.CustomerPhone);
+
+		if (customer != null) 
+		{
+			customer.Points = Math.Max(0, customer.Points + (receipt.PointsEarned - prevPoint));
+		}
 
 		await _context.SaveChangesAsync();
 		return receipt;
+	}
+
+	public async Task<ReceiptItem> UpdateReceiptItemAsync(Guid id, ReceiptItem updateItem)
+	{
+		var item = await _context.ReceiptItems
+			.FindAsync(id);
+		if (item == null)
+			throw new Exception("Receipt item not found");
+
+		var receipt = await _context.Receipts
+			.Include(r => r.Items)
+			.FirstOrDefaultAsync(r => r.Id == item.ReceiptId);
+		if (receipt == null)
+			throw new Exception("Receipt not found");
+
+		var storage = await _context.Storages
+			.FindAsync(item.BookId);
+		if (storage == null)
+			throw new Exception("No storage data found for this item");
+
+		if (storage.Quantity < (item.Quantity - updateItem.Quantity))
+			throw new Exception("Not enough stock");
+
+		item.Quantity = updateItem.Quantity;
+		item.UnitPrice = updateItem.UnitPrice;
+		storage.Quantity -= (item.Quantity - updateItem.Quantity);
+
+		var prevPoint = receipt.PointsEarned;
+		CalculateReceipt(receipt);
+		var customer = await _context.Customers
+			.FirstOrDefaultAsync(customer => customer.PhoneNumber == receipt.CustomerPhone);
+
+		if (customer != null)
+		{
+			customer.Points = Math.Max(0, customer.Points + (receipt.PointsEarned - prevPoint));
+		}
+
+		await _context.SaveChangesAsync();
+		return item;
+	}
+
+	public async Task DeleteReceiptItemAsync(Guid id)
+	{
+		var item = await _context.ReceiptItems
+			.FirstOrDefaultAsync(i => i.Id == id);
+
+		if (item == null)
+			throw new Exception("Receipt item not found");
+
+		var receipt = await _context.Receipts
+			.Include(r => r.Items)
+			.FirstOrDefaultAsync(r => r.Id == item.ReceiptId);
+
+		if (receipt == null)
+			throw new Exception("Receipt not found");
+
+		var storage = await _context.Storages
+			.FirstOrDefaultAsync(s => s.Id == item.BookId);
+
+		if (storage == null)
+			throw new Exception("Storage not found");
+
+		storage.Quantity += item.Quantity;
+		
+		var prevPoints = receipt.PointsEarned;
+
+		receipt.Items.Remove(item);
+		_context.ReceiptItems.Remove(item);
+		CalculateReceipt(receipt);
+
+		if (!string.IsNullOrEmpty(receipt.CustomerPhone))
+		{
+			var customer = await _context.Customers
+				.FirstOrDefaultAsync(c => c.PhoneNumber == receipt.CustomerPhone);
+
+			if (customer != null)
+			{
+				customer.Points = Math.Max(0, customer.Points + (receipt.PointsEarned - prevPoints));
+			}
+		}
+
+		await _context.SaveChangesAsync();
+	}
+
+	public async Task DeleteReceiptAsync(Guid id)
+	{
+		var receipt = await _context.Receipts
+			.Include(r => r.Items)
+			.FirstOrDefaultAsync(r => r.Id == id);
+
+		if (receipt == null)
+			throw new Exception("Receipt not found");
+
+		foreach (var item in receipt.Items)
+		{
+			var storage = await _context.Storages
+				.FirstOrDefaultAsync(s => s.Id == item.BookId);
+
+			if (storage != null)
+			{
+				storage.Quantity += item.Quantity;
+			}
+		}
+
+		if (!string.IsNullOrEmpty(receipt.CustomerPhone))
+		{
+			var customer = await _context.Customers
+				.FirstOrDefaultAsync(c => c.PhoneNumber == receipt.CustomerPhone);
+
+			if (customer != null)
+			{
+				customer.Points = Math.Max(0, customer.Points - receipt.PointsEarned);
+			}
+		}
+
+		_context.Receipts.Remove(receipt);
+		await _context.SaveChangesAsync();
 	}
 }

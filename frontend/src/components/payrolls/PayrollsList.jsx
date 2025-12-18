@@ -5,6 +5,7 @@ import DataTable from 'react-data-table-component';
 import { api } from '../../api.jsx';
 import { PayrollColumns, PayrollButtons } from '../../utils/PayrollHelper.jsx';
 import autoprefixer from 'autoprefixer';
+import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const PayrollsList = () => {
 	const [payrolls, setPayrolls] = useState([]);
@@ -21,7 +22,7 @@ const PayrollsList = () => {
 				const data = res.data.map((payroll) => ({
 					id: payroll.id,
 					employeeName: payroll.user.fullName,
-					period: `${payroll.month}-${payroll.year}`,
+					period: `${String(payroll.month).padStart(2, '0')}/${payroll.year}`,
 					baseSalary: payroll.baseSalary,
 					bonus: payroll.bonus,
 					total: payroll.total,
@@ -52,7 +53,7 @@ const PayrollsList = () => {
 	}
 
   	return (
-		<>{payrollsLoading ? <div>Loading...</div> :
+		<>{payrollsLoading ? <ListSkeleton/> :
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Payrolls</h3>

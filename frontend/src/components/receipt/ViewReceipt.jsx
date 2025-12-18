@@ -7,7 +7,8 @@ import Select from 'react-select';
 import "react-datepicker/dist/react-datepicker.css";
 import { api } from '../../api'
 import CustomInput from '../CustomInput';
-import { ReceiptItemColumns } from '../../utils/ReceiptHelper.jsx';
+import { ReceiptItemColumns, ReceiptItemButtons } from '../../utils/ReceiptHelper.jsx';
+import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const ViewReceipt = () => {
 	const { id } = useParams();
@@ -18,7 +19,6 @@ const ViewReceipt = () => {
 
 	const fetchReceipt = async () => {
 		setLoading(true);
-
 		try {
 			var res = await api.get(`/Receipts/${id}`);
 
@@ -37,7 +37,8 @@ const ViewReceipt = () => {
 				quantity: item.quantity,
 				author: item.book.author,
 				price: item.unitPrice,
-				subTotal: item.subTotal
+				subTotal: item.subTotal,
+				actions: (<ReceiptItemButtons id={item.id} handleDelete={handleDelete} employeeId={item.receipt.employeeId}/>)
 			}));
 
 			setItems(data);
@@ -52,53 +53,69 @@ const ViewReceipt = () => {
 		fetchReceipt();
 	}, [])
 
+	const handleDelete = async (id) => {
+		setItems(items.filter(item => item.id !== id));
+		try {
+			const res = await api.delete(`/Receipts/items/${id}`);
+			await fetchReceipt();
+		} catch (error) {
+			console.log(error);
+			await fetchReceipt();
+		}
+	}
+
 	return (
-		<div className='p-5'>
-			<div className='text-center'>
-				<h3 className='text-2xl font-bold'>Receipt Items</h3>
-			</div>
-			<div className='flex justify-between items-center'>
-				<input type="text" placeholder='Search books by name'
-					onChange={(e) => setSearchText(e.target.value)}
-					className='px-4 py-0.5 border'>
-				</input>
-				<Link to={`/admin-dashboard/receipts/${id}/items/add`}
-					className='px-4 py-1 bg-teal-600 rounded text-white'>
-						Add item
-				</Link>
-			</div>
-			<div className='mt-5'>
-				<DataTable
-					columns={ReceiptItemColumns}
-					data={items.filter((item) =>
-						item.bookName.toLowerCase().includes(searchText.toLowerCase()))}
-					pagination
-				/>
-			</div>
-			<div className="mt-4 flex justify-between bg-white p-4 rounded shadow text-sm">
-				<div className="space-y-1">
-					<p>
-						<span className="font-semibold">Employee:</span> {receipt.employee}
-					</p>
-					<p>
-						<span className="font-semibold">Created:</span>{" "}
-						{receipt.createdAt &&
-							new Date(receipt.createdAt).toLocaleDateString('en-GB')}
-					</p>
-					<p>
-						<span className="font-semibold">Total:</span> {receipt.total}$
-					</p>
+		<>{ loading ? <ListSkeleton/> :
+			<div className='p-5'>
+				<div className='text-center'>
+					<h3 className='text-2xl font-bold'>Receipt Items</h3>
 				</div>
-				<div className="space-y-1 text-right">
-					<p>
-						<span className="font-semibold">Customer:</span> {receipt.customerName}
-					</p>
-					<p>
-						<span className="font-semibold">Phone:</span> {receipt.customerPhone}
-					</p>
+				<div className='flex justify-between items-center'>
+					<input type="text" placeholder='Search books by name'
+						onChange={(e) => setSearchText(e.target.value)}
+						className='px-4 py-0.5 border'>
+					</input>
+					<Link to={`/admin-dashboard/receipts/${id}/items/add`}
+						className='px-4 py-1 bg-teal-600 rounded text-white'>
+							Add item
+					</Link>
+				</div>
+				<div className='mt-5'>
+					<DataTable
+						columns={ReceiptItemColumns}
+						data={items.filter((item) =>
+							item.bookName.toLowerCase().includes(searchText.toLowerCase()))}
+						pagination
+					/>
+				</div>
+				<div className="mt-4 flex justify-between bg-white p-4 rounded shadow text-sm">
+					<div className="space-y-1">
+						<p>
+							<span className="font-semibold">Employee:</span> {receipt.employee}
+						</p>
+						<p>
+							<span className="font-semibold">Created:</span>{" "}
+							{receipt.createdAt &&
+								new Date(receipt.createdAt).toLocaleDateString('en-GB')}
+						</p>
+						<p>
+							<span className="font-semibold">Total:</span> {receipt.total}$
+						</p>
+					</div>
+					<div className="space-y-1 text-right">
+						<p>
+							<span className="font-semibold">Customer:</span> {receipt.customerName}
+						</p>
+						<p>
+							<span className="font-semibold">Phone:</span> {receipt.customerPhone}
+						</p>
+						<p>
+							<span className="font-semibold">Receipt ID:</span> {id}
+						</p>
+					</div>
 				</div>
 			</div>
-		</div>
+		}</>
 	)
 }
 

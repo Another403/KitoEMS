@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 
 import { EmployeeButtons, EmployeeColumns } from '../../utils/EmployeeHelper';
 import { api } from '../../api.jsx';
+import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const EmployeeList = () => {
 	const [searchText, setSearchText] = useState("");
@@ -53,7 +54,7 @@ const EmployeeList = () => {
 	}
 	
 	return (
-		<>{employeesLoading ? <div>Loading employee...</div> :
+		<>{employeesLoading ? <ListSkeleton/> :
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Employees</h3>

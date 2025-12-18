@@ -4,6 +4,7 @@ import DataTable from 'react-data-table-component';
 
 import { api } from '../../api.jsx';
 import { CustomerColumns, CustomerButtons } from '../../utils/CustomerHelper';
+import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const CustomersList = () => {
 	const [customers, setCustomers] = useState([]);
@@ -50,7 +51,8 @@ const CustomersList = () => {
 	}
 
 	return (
-		<> { customersLoading ? <div>Loading customers...</div> :
+		<> { customersLoading ? 
+			<ListSkeleton/> :
 			<div className='p-5'>
 				<div className='text-center'>
 					<h3 className='text-2xl font-bold'>Customers</h3>
