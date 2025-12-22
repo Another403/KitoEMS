@@ -32,6 +32,8 @@ import ViewReceipt from './components/receipt/ViewReceipt';
 import AddReceiptItem from './components/receiptItem/AddReceiptItem';
 import EditReceiptItem from './components/receiptItem/EditReceiptItem';
 import RejectLeave from './components/leave/RejectLeave';
+import WorkshiftScheduler from './components/workshift/WorkshiftScheduler';
+//import Calendar from './components/workshift/Calendar';
 
 const App = () => {
 	return (
@@ -81,6 +83,9 @@ const App = () => {
 					<Route path="/admin-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
 					<Route path="/admin-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
 					<Route path="/admin-dashboard/receipts/item/edit/:id" element={<EditReceiptItem/>}></Route>
+
+					{/* Work shifts */}
+					<Route path="/admin-dashboard/workshifts" element={<WorkshiftScheduler/>}></Route>
 				</Route>
 
 				{/* EMPLOYEE DASHBOARD */}

@@ -23,7 +23,7 @@ export const LeaveColumns = [
 	},
 	{
 		name: 'Rejection reason',
-		selector : (row) => row.rejectionReason || 'Not provided',
+		selector : (row) => row.rejectionReason
 	},
 	{
 		name: 'Reason',
@@ -49,6 +49,10 @@ export const LeaveButtons = ({id, handleDelete, status}) => {
 				<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
 					onClick={() => navigate(`/employee-dashboard/leaves/edit/${id}`)}>
 						Edit
+				</button>
+				<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
+					onClick={() => handleDelete(id)}>
+						Revert
 				</button>
 			</div>
 		} </>

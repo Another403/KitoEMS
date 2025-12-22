@@ -33,7 +33,7 @@ export const AdminLeaveColumns = [
 	},
 	{
 		name: 'Rejection reason',
-		selector : (row) => row.rejectionReason ?? "none"
+		selector : (row) => row.rejectionReason
 	},
 	{
 		name: 'Leave type',

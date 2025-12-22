@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css';
 import 'react-loading-skeleton/dist/skeleton.css';
+import "react-calendar/dist/Calendar.css";
 import App from './App.jsx'
 import { AuthProvider } from './contexts/AuthContext.jsx';
 

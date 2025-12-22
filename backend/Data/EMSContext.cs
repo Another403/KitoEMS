@@ -98,7 +98,7 @@ public class EMSContext : IdentityDbContext
 	public DbSet<ReturnDetail> ReturnDetails { get; set; }
 	public DbSet<StockImport> StockImports { get; set; }
 	public DbSet<Storage> Storages { get; set; }
-	public DbSet<WorkSchedules> WorkSchedules { get; set; }
+	public DbSet<Workshift> Workshifts { get; set; }
 	public DbSet<Receipt> Receipts { get; set; }
 	public DbSet<ReceiptItem> ReceiptItems { get; set; }
 }
