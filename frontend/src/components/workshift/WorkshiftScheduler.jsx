@@ -259,10 +259,10 @@ const WorkshiftScheduler = () => {
 				>
 					<div>
 						<h2 className="text-lg font-semibold text-slate-800">
-							Schedule a new shift
+							{ editingId ? "Edit a shift" : "Schedule a new shift"}
 						</h2>
 						<p className="text-xs text-slate-500">
-							Add the shift details and assign an employee.
+							{ editingId ? "Modify shift details" : "Add the shift details and assign an employee."}
 						</p>
 					</div>
 
