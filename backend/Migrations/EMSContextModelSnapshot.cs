@@ -546,8 +546,9 @@ namespace backend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("EmployeeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("End")
                         .HasColumnType("datetime2");
@@ -566,6 +567,8 @@ namespace backend.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Workshifts");
                 });
@@ -706,6 +709,17 @@ namespace backend.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Receipt");
+                });
+
+            modelBuilder.Entity("backend.Models.Workshift", b =>
+                {
+                    b.HasOne("backend.Models.AppUser", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("backend.Models.Receipt", b =>
