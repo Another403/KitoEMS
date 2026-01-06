@@ -4,8 +4,14 @@ import "react-datepicker/dist/react-datepicker.css";
 import DataTable from "react-data-table-component";
 
 import { api } from "../../api.jsx";
-import { bestSellerColumns, formatCurrency, topEmployeeColumns, } from "../../utils/ReportHelper";
+import {
+	bestSellerColumns,
+	formatCurrency,
+	topEmployeeColumns,
+} from "../../utils/ReportHelper";
 import BestSellerChart from "./BestSellerChart.jsx";
+import { ReceiptColumns } from "@/utils/ReceiptHelper.jsx";
+import TopEmployeeChart from "./TopEmployeeChart.jsx";
 
 const rangeOptions = [
 	{ value: "weekly", label: "This Week" },
@@ -24,7 +30,9 @@ const Reports = () => {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
 
+	// Chart data
 	const [bestSellersChartData, setBestSellersChartData] = useState([]);
+	const [topEmployeesChartData, setTopEmployeesChartData] = useState([]);
 
 	const handleRangeChange = (value) => {
 		setRange(value);
@@ -131,11 +139,22 @@ const Reports = () => {
 
 			setSalesReport(salesRes.data);
 			setBestSellers(bestSellerRes.data ?? []);
-			setBestSellersChartData(bestSellerRes.data.map((book) => ({
-				name: book.title,
-				quantity: book.quantity
-			})));
 			setTopEmployees(topEmployeesRes.data ?? []);
+
+			// Set datas to draw charts
+			setBestSellersChartData(
+				bestSellerRes.data.map((book) => ({
+					name: book.title,
+					quantity: book.quantity,
+				}))
+			);
+			setTopEmployeesChartData(
+				topEmployeesRes.data.map((employee) => ({
+					name: employee.fullName,
+					revenue: employee.revenue,
+					receiptCount: employee.receiptCount,
+				}))
+			);
 		} catch (err) {
 			setError("Failed to load report data.");
 		} finally {
@@ -230,19 +249,25 @@ const Reports = () => {
 						Top selling books for the selected period
 					</p>
 				</div>
-				<div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-1">
-					<div className="p-4">
-						<DataTable
-							columns={bestSellerColumns}
-							data={bestSellers}
-							highlightOnHover
-							noDataComponent="No data available for this range."
-							pagination
-							paginationPerPage={5}
-							striped
-						/>
+
+				<div className="p-4">
+					<DataTable
+						columns={bestSellerColumns}
+						data={bestSellers}
+						highlightOnHover
+						noDataComponent="No data available for this range."
+						pagination
+						paginationPerPage={5}
+						striped
+					/>
+
+					<div className="mt-6 flex justify-center">
+						<div className="w-full max-w-2xl">
+							<div className="h-80 w-full">
+								<BestSellerChart data={bestSellersChartData} />
+							</div>
+						</div>
 					</div>
-					<BestSellerChart data={bestSellersChartData}/>
 				</div>
 			</div>
 
@@ -253,6 +278,7 @@ const Reports = () => {
 						Employees generating the most revenue
 					</p>
 				</div>
+
 				<div className="p-4">
 					<DataTable
 						columns={topEmployeeColumns}
@@ -263,6 +289,16 @@ const Reports = () => {
 						paginationPerPage={5}
 						striped
 					/>
+
+					<div className="mt-6 flex justify-center">
+						<div className="w-full max-w-2xl">
+							<div className="h-80 w-full">
+								<TopEmployeeChart
+									data={topEmployeesChartData}
+								/>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
