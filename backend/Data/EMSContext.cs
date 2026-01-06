@@ -47,6 +47,18 @@ public class EMSContext : IdentityDbContext
 			.HasForeignKey(i => i.ReceiptId)
 			.OnDelete(DeleteBehavior.Cascade);
 
+		builder.Entity<Return>()
+			.HasOne(r => r.Receipt)
+			.WithMany()
+			.HasForeignKey(r => r.ReceiptId)
+			.OnDelete(DeleteBehavior.Cascade);
+
+		builder.Entity<Return>()
+			.HasMany(r => r.Items)
+			.WithOne(i => i.Return)
+			.HasForeignKey(i => i.ReturnId)
+			.OnDelete(DeleteBehavior.Cascade);
+
 		#endregion RELATIONSHIPS
 
 		#region DECIMAL_PRECISION
