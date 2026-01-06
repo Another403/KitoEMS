@@ -13,7 +13,7 @@ public class Customer
 	{
 		string[] ranks = { "silver", "gold", "platinum", "diamond" };
 
-		int rankIndex = Points / 500;
+		int rankIndex = Points / 15;
 
 		if (rankIndex >= ranks.Length)
 			rankIndex = ranks.Length - 1;

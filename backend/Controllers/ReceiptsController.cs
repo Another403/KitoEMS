@@ -4,13 +4,11 @@ using backend.Models.Dto;
 using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
 public class ReceiptsController : ControllerBase
 {
 	public readonly BillingService _service;

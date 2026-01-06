@@ -2,19 +2,21 @@
 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
 
 namespace backend.Data;
 
 public class EMSContext : IdentityDbContext
 {
-	public EMSContext(DbContextOptions<EMSContext> options) : base(options) { }
+	public EMSContext(DbContextOptions<EMSContext> options) : base(options)
+	{
+	}
 
 	protected override void OnModelCreating(ModelBuilder builder)
 	{
 		base.OnModelCreating(builder);
 
 		#region CONSTRAINTS
+
 		builder.Entity<Customer>()
 			.HasIndex(c => c.PhoneNumber)
 			.IsUnique();
@@ -22,9 +24,11 @@ public class EMSContext : IdentityDbContext
 		builder.Entity<Leave>()
 			.HasIndex(l => new { l.UserId, l.StartDate, l.EndDate })
 			.IsUnique();
-		#endregion
+
+		#endregion CONSTRAINTS
 
 		#region RELATIONSHIPS
+
 		builder.Entity<Payroll>()
 			.HasOne(p => p.User)
 			.WithMany()
@@ -42,9 +46,11 @@ public class EMSContext : IdentityDbContext
 			.WithOne(i => i.Receipt)
 			.HasForeignKey(i => i.ReceiptId)
 			.OnDelete(DeleteBehavior.Cascade);
-		#endregion
+
+		#endregion RELATIONSHIPS
 
 		#region DECIMAL_PRECISION
+
 		builder.Entity<AppUser>()
 				.Property(b => b.Salary)
 				.HasPrecision(18, 2);
@@ -84,7 +90,8 @@ public class EMSContext : IdentityDbContext
 		builder.Entity<ReceiptItem>()
 			.Property(ri => ri.UnitPrice)
 			.HasPrecision(18, 2);
-		#endregion
+
+		#endregion DECIMAL_PRECISION
 	}
 
 	public DbSet<AppUser> AppUsers { get; set; }

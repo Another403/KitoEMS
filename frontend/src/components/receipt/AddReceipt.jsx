@@ -109,8 +109,8 @@ const AddReceipt = () => {
 						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
 					>
 						<option value="Walk in">Walk in</option>
-						<option value="Member">Member</option>
-						<option value="Create new member">Create new member</option>
+						<option value="Member">Existing member</option>
+						<option value="Create new member">New member</option>
 					</select>
 				</div>
 				

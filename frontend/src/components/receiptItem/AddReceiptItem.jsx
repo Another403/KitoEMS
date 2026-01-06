@@ -9,7 +9,10 @@ const AddReceiptItem = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const [item, setItem] = useState({});
+	const [item, setItem] = useState({
+		quantity: 1,
+		unitPrice: 0,
+	});
 	const [books, setBooks] = useState([]);
 
 	const fetchBooks = async () => {
@@ -20,6 +23,7 @@ const AddReceiptItem = () => {
 				return {
 					value: book.id,
 					label: book.name,
+					unitPrice: book.price
 				};
 			});
 
@@ -57,7 +61,9 @@ const AddReceiptItem = () => {
 	}
 
 	const handleBookSelect = (e) => {
-		setItem({...item, bookId: e.value});
+		setItem({...item, bookId: e.value, unitPrice: e.unitPrice});
+
+		//console.log(item);
 	}
 
 	return (
@@ -85,6 +91,7 @@ const AddReceiptItem = () => {
 					<input
 						type="number"
 						name="unitPrice"
+						value={item.unitPrice}
 						min="0"
 						step="0.01"
 						placeholder='Enter unit price'
@@ -101,6 +108,7 @@ const AddReceiptItem = () => {
 					<input
 						type="number"
 						name="quantity"
+						value={item.quantity}
 						min="0"
 						placeholder='Enter quantity'
 						onChange={handleChange}

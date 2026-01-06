@@ -15,7 +15,7 @@ const AdminAddLeave = () => {
 		endDate: new Date(),
 		reason: "no reason",
 		status: "pending",
-		leaveType: "Multiple days",
+		leaveType: "",
 		rejectionReason: ""
 	});
 
@@ -166,15 +166,12 @@ const AdminAddLeave = () => {
 
 				<div>
 					<label>Leave type</label>
-					<select
+					<input
 						name="leaveType"
 						value={leave.leaveType}
 						onChange={handleChange}
 						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
-					>
-						<option value="Partial">Partial</option>
-						<option value="Multiple days">Multiple days</option>
-					</select>
+					/>
 				</div>
 
 				<button type="submit"

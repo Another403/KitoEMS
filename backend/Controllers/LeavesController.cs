@@ -9,18 +9,19 @@ namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
 public class LeavesController : ControllerBase
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;
 	private readonly IConfiguration _configuration;
+
 	public LeavesController(EMSContext context, UserManager<AppUser> userManager, IConfiguration configuration)
 	{
 		_context = context;
 		_userManager = userManager;
 		_configuration = configuration;
 	}
+
 	[HttpGet]
 	public async Task<ActionResult<List<Leave>>> GetAllLeaves()
 	{

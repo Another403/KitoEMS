@@ -1,12 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using backend.Data;
+﻿using backend.Data;
 using backend.Models;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using backend.Models.Dto;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc.ActionConstraints;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace backend.Services;
 
@@ -14,7 +9,7 @@ public class BillingService
 {
 	private readonly EMSContext _context;
 	private readonly decimal _commissionRate = 0.04m;
-	private readonly int _pointsPerAmount = 100;
+	private readonly int _pointsPerAmount = 10;
 
 	public BillingService(EMSContext context)
 	{
@@ -25,6 +20,40 @@ public class BillingService
 	{
 		if (TotalAmount <= 0) return 0;
 		return (int)(Math.Floor(TotalAmount / _pointsPerAmount));
+	}
+
+	private (DateTime? From, DateTime? To) ResolveDateRange(string? range, DateTime? from, DateTime? to)
+	{
+		if (string.IsNullOrWhiteSpace(range))
+			return (from, to);
+
+		var normalizedRange = range!.Trim().ToLowerInvariant();
+		var now = DateTime.UtcNow;
+
+		return normalizedRange switch
+		{
+			"weekly" => (now.Date.AddDays(-(int)now.DayOfWeek), now),
+			"monthly" => (new DateTime(now.Year, now.Month, 1, 0, 0, 0, DateTimeKind.Utc), now),
+			"yearly" => (new DateTime(now.Year, 1, 1, 0, 0, 0, DateTimeKind.Utc), now),
+			"custom" when from.HasValue && to.HasValue => (from, to),
+			"custom" => throw new ArgumentException("Custom range requires both 'from' and 'to' values."),
+			_ => throw new ArgumentException("Invalid range. Valid values are: weekly, monthly, yearly, custom."),
+		};
+	}
+
+	private IQueryable<Receipt> BuildReceiptQuery(DateTime? from, DateTime? to)
+	{
+		var query = _context.Receipts
+				.Include(r => r.Items).ThenInclude(i => i.Book)
+				.Include(r => r.Employee)
+				.AsQueryable();
+
+		if (from.HasValue)
+			query = query.Where(r => r.CreatedAt >= from.Value);
+		if (to.HasValue)
+			query = query.Where(r => r.CreatedAt <= to.Value);
+
+		return query;
 	}
 
 	public void CalculateReceipt(Receipt receipt)
@@ -92,16 +121,7 @@ public class BillingService
 
 	public async Task<object> GetEmployeeSalesReportAsync(string EmployeeId, DateTime? from, DateTime? to)
 	{
-		var query = _context.Receipts
-			.Include(r => r.Items).ThenInclude(i => i.Book)
-			.AsQueryable();
-
-		if (from.HasValue)
-			query = query.Where(r => r.CreatedAt >= from.Value);
-		if (to.HasValue)
-			query = query.Where(r => r.CreatedAt <= to.Value);
-
-		var receipts = await query.ToListAsync();
+		var receipts = await BuildReceiptQuery(from, to).ToListAsync();
 
 		decimal totalAmount = receipts.Sum(b => b.Total);
 		decimal bonus = totalAmount * _commissionRate;
@@ -118,35 +138,69 @@ public class BillingService
 		};
 	}
 
-	public async Task<object> GetSalesReportAsync(DateTime? from, DateTime? to)
+	public async Task<SalesReportResult> GetSalesReportAsync(DateTime? from, DateTime? to, int limit = 10)
 	{
-		var query = _context.Receipts
-			.Include(r => r.Items).ThenInclude(i => i.Book)
-			.AsQueryable();
-
-		if (from.HasValue)
-			query = query.Where(r => r.CreatedAt >= from.Value);
-		if (to.HasValue)
-			query = query.Where(r => r.CreatedAt <= to.Value);
-
-		var receipts = await query.ToListAsync();
+		var receipts = await BuildReceiptQuery(from, to).ToListAsync();
 
 		var totalRevenue = receipts.Sum(b => b.Total);
-		var totalreceipts = receipts.Count;
+		var totalReceipts = receipts.Count;
 		var bestSelling = receipts
 			.SelectMany(b => b.Items)
 			.GroupBy(i => new { i.BookId, i.Book!.Name })
-			.Select(g => new { BookId = g.Key.BookId, Title = g.Key.Name, Quantity = g.Sum(i => i.Quantity) })
+			.Select(g => new BestSellerReportItem { BookId = g.Key.BookId, Title = g.Key.Name, Quantity = g.Sum(i => i.Quantity) })
 			.OrderByDescending(x => x.Quantity)
-			.Take(10)
+			.Take(limit)
 			.ToList();
 
-		return new
+		return new SalesReportResult
 		{
 			TotalRevenue = totalRevenue,
-			Totalreceipts = totalreceipts,
+			TotalReceipts = totalReceipts,
 			BestSelling = bestSelling
 		};
+	}
+
+	public async Task<List<BestSellerReportItem>> GetBestSellersAsync(DateTime? from, DateTime? to, int limit = 10)
+	{
+		var receipts = await BuildReceiptQuery(from, to).ToListAsync();
+
+		return receipts
+			.SelectMany(b => b.Items)
+			.GroupBy(i => new { i.BookId, i.Book!.Name })
+			.Select(g => new BestSellerReportItem
+			{
+				BookId = g.Key.BookId,
+				Title = g.Key.Name,
+				Quantity = g.Sum(i => i.Quantity)
+			})
+			.OrderByDescending(x => x.Quantity)
+			.Take(limit)
+			.ToList();
+	}
+
+	public async Task<List<EmployeeRevenueReportItem>> GetTopEmployeesAsync(DateTime? from, DateTime? to, int limit = 10)
+	{
+		var receipts = await BuildReceiptQuery(from, to).ToListAsync();
+
+		return receipts
+			.GroupBy(r => new
+			{
+				r.EmployeeId,
+				Name = r.Employee != null && !string.IsNullOrWhiteSpace(r.Employee.FullName)
+							? r.Employee.FullName
+							: "Unknown"
+			})
+			.Select(g => new EmployeeRevenueReportItem
+			{
+				EmployeeId = g.Key.EmployeeId,
+				FullName = g.Key.Name,
+				Revenue = g.Sum(r => r.Total),
+				ReceiptCount = g.Count()
+			})
+			.OrderByDescending(e => e.Revenue)
+			.ThenBy(e => e.FullName)
+			.Take(limit)
+			.ToList();
 	}
 
 	public async Task<Receipt> AddItemToReceiptAsync(Guid id, ReceiptItem newItem)
@@ -204,7 +258,7 @@ public class BillingService
 		var customer = await _context.Customers
 			.FirstOrDefaultAsync(customer => customer.PhoneNumber == receipt.CustomerPhone);
 
-		if (customer != null) 
+		if (customer != null)
 		{
 			customer.Points = Math.Max(0, customer.Points + (receipt.PointsEarned - prevPoint));
 		}
@@ -274,7 +328,7 @@ public class BillingService
 			throw new Exception("Storage not found");
 
 		storage.Quantity += item.Quantity;
-		
+
 		var prevPoints = receipt.PointsEarned;
 
 		receipt.Items.Remove(item);

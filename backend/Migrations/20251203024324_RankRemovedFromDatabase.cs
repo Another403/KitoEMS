@@ -4,26 +4,26 @@
 
 namespace backend.Migrations
 {
-    /// <inheritdoc />
-    public partial class RankRemovedFromDatabase : Migration
-    {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "Rank",
-                table: "Customers");
-        }
+	/// <inheritdoc />
+	public partial class RankRemovedFromDatabase : Migration
+	{
+		/// <inheritdoc />
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.DropColumn(
+				name: "Rank",
+				table: "Customers");
+		}
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<string>(
-                name: "Rank",
-                table: "Customers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
-        }
-    }
+		/// <inheritdoc />
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.AddColumn<string>(
+				name: "Rank",
+				table: "Customers",
+				type: "nvarchar(max)",
+				nullable: false,
+				defaultValue: "");
+		}
+	}
 }

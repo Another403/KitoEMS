@@ -119,6 +119,15 @@ const AdminEditLeave = () => {
 					onChange={handleChange}
 					className="mt-1 w-full p-2 border border-gray-300 rounded-md"
 				></textarea>
+				<div>
+					<label>Leave type</label>
+					<input
+						name="leaveType"
+						value={leave.leaveType}
+						onChange={handleChange}
+						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+					/>
+				</div>
 
 				<button
 					type="submit"

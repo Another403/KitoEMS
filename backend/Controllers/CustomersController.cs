@@ -1,21 +1,19 @@
 ﻿using backend.Data;
 using backend.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Common;
 
 namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
 public class CustomersController : Controller
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;
 	private readonly IConfiguration _configuration;
+
 	public CustomersController(EMSContext context, UserManager<AppUser> userManager, IConfiguration configuration)
 	{
 		_context = context;
@@ -55,16 +53,16 @@ public class CustomersController : Controller
 			Points = rawCustomer.Points
 		};
 
-		try 
+		try
 		{
 			_context.Customers.Add(newCustomer);
 			await _context.SaveChangesAsync();
-		} 
+		}
 		catch (DbUpdateException ex)
 		{
 			return BadRequest(new { message = "Phone number already exists." });
 		}
-		
+
 		return Ok(newCustomer);
 	}
 

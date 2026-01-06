@@ -107,6 +107,15 @@ const AdminAddLeave = () => {
 						onChange={handleChange}
 					/>
 				</div>
+				<div>
+					<label>Leave type</label>
+					<input
+						name="leaveType"
+						value={leave.leaveType}
+						onChange={handleChange}
+						className="mt-1 w-full p-2 border border-gray-300 rounded-md"
+					/>
+				</div>
 
 				<button type="submit"
 					className='w-full mt-6 bg-teal-600 hover:bg-teal-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'>

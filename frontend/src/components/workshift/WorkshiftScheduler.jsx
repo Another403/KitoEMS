@@ -71,14 +71,18 @@ const WorkshiftScheduler = () => {
 		fetchEmployees();
 	}, []);
 
-	const upcomingShifts = useMemo(
-		() =>
-			events
-				.slice()
-				.sort((a, b) => new Date(a.start) - new Date(b.start))
-				.slice(0, 5),
-		[events]
-	);
+	const upcomingShifts = useMemo(() => {
+		const now = new Date();
+
+		return events
+			.filter((e) => {
+				const end = e.end ? new Date(e.end) : new Date(e.start);
+				return end >= now;
+			})
+			.slice()
+			.sort((a, b) => new Date(a.start) - new Date(b.start))
+			.slice(0, 5);
+	}, [events]);
 
 	const handleEditStart = async (shiftId) => {
 		console.log(shiftId);
@@ -259,10 +263,14 @@ const WorkshiftScheduler = () => {
 				>
 					<div>
 						<h2 className="text-lg font-semibold text-slate-800">
-							{ editingId ? "Edit a shift" : "Schedule a new shift"}
+							{editingId
+								? "Edit a shift"
+								: "Schedule a new shift"}
 						</h2>
 						<p className="text-xs text-slate-500">
-							{ editingId ? "Modify shift details" : "Add the shift details and assign an employee."}
+							{editingId
+								? "Modify shift details"
+								: "Add the shift details and assign an employee."}
 						</p>
 					</div>
 

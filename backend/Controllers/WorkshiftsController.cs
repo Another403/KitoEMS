@@ -1,10 +1,7 @@
 ﻿using backend.Data;
 using backend.Models;
-using backend.Models.Dto;
-using backend.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace backend.Controllers;
 
@@ -47,7 +44,7 @@ public class WorkshiftsController : ControllerBase
 	{
 		if (workshift == null)
 		{
-			return BadRequest(new {message  = "data is null"});
+			return BadRequest(new { message = "data is null" });
 		}
 
 		var newWorkshift = new Workshift

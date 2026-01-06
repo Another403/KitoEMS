@@ -29,7 +29,7 @@ export const ReceiptColumns = [
 	},
 	{
 		name: 'Total amount',
-		selector : (row) => row.total,
+		selector : (row) => `${row.total}$`,
 	},
 	{
 		name: 'Created at',
@@ -61,7 +61,7 @@ export const ReceiptItemColumns = [
 	},
 	{
 		name: 'Unit price',
-		selector : (row) => row.price,
+		selector : (row) => `${row.price}$`,
 		sortable: true,
 	},
 	{

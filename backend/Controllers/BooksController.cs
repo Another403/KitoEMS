@@ -1,7 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
 using backend.Models.Dto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +9,12 @@ namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
 public class BooksController : Controller
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;
 	private readonly IConfiguration _configuration;
+
 	public BooksController(EMSContext context, UserManager<AppUser> userManager, IConfiguration configuration)
 	{
 		_context = context;
@@ -34,7 +33,6 @@ public class BooksController : Controller
 	{
 		return Ok(await _context.Storages.ToListAsync());
 	}
-
 
 	[HttpGet("{id}")]
 	public async Task<ActionResult<Book>> GetBookById(Guid id)
@@ -121,7 +119,7 @@ public class BooksController : Controller
 
 		if (storage == null)
 		{
-			return NotFound(new { message = "storage not found"});
+			return NotFound(new { message = "storage not found" });
 		}
 
 		storage.Quantity += importBookModel.Quantity;
@@ -137,7 +135,7 @@ public class BooksController : Controller
 		var book = await _context.Books.FindAsync(id);
 		var storage = await _context.Storages.FindAsync(id);
 
-		if (book  == null)
+		if (book == null)
 		{
 			return NotFound();
 		}

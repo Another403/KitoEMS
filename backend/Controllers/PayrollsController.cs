@@ -1,7 +1,6 @@
 ﻿using backend.Data;
 using backend.Models;
 using backend.Models.Dto;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,12 +9,12 @@ namespace backend.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
 public class PayrollsController : ControllerBase
 {
 	private readonly EMSContext _context;
 	private readonly UserManager<AppUser> _userManager;
 	private readonly IConfiguration _configuration;
+
 	public PayrollsController(EMSContext context, UserManager<AppUser> userManager, IConfiguration configuration)
 	{
 		_context = context;

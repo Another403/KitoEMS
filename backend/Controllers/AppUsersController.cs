@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Globalization;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -159,8 +158,8 @@ public class AppUsersController : Controller
 	{
 		var user = await _userManager.Users.FirstOrDefaultAsync(x => x.RefreshToken == refreshTokenModel.RefreshToken);
 
-		if (user == null || user.RefreshTokenExpiry <= DateTime.UtcNow) 
-		{ 
+		if (user == null || user.RefreshTokenExpiry <= DateTime.UtcNow)
+		{
 			return Unauthorized();
 		}
 

@@ -6,6 +6,7 @@ public class ReceiptItem
 {
 	public Guid Id { get; set; }
 	public Guid ReceiptId { get; set; }
+
 	[JsonIgnore]
 	public Receipt? Receipt { get; set; }
 
