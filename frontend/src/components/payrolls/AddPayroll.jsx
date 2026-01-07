@@ -6,6 +6,8 @@ import Select from 'react-select';
 import "react-datepicker/dist/react-datepicker.css";
 import { api } from '../../api'
 import CustomInput from '../CustomInput';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AddPayroll = () => {
 	const [payroll, setPayroll] = useState({});
@@ -15,6 +17,8 @@ const AddPayroll = () => {
 	const [date, setDate] = useState(new Date());
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	useEffect(() => {
 		const fetchUsers = async () => {
@@ -50,7 +54,7 @@ const AddPayroll = () => {
 			const res = await api.post("/Payrolls", payroll);
 
 			if (res.data)
-				navigate("/admin-dashboard/payrolls");
+				navigate(`${basePath}/payrolls`);
 		} catch (error) {
 			alert("Error");
 		}
@@ -135,8 +139,9 @@ const AddPayroll = () => {
 						Add payroll
 				</button>
 				<button
+					type="button"
 					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/payrolls')}>
+					onClick={() => navigate(`${basePath}/payrolls`)}>
 						Cancel
 				</button>
 			</form>

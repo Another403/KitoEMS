@@ -5,6 +5,8 @@ import Select from "react-select";
 
 import { api } from "../../api";
 import CustomInput from "../CustomInput";
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AdminEditLeave = () => {
 	const { id } = useParams();
@@ -22,6 +24,8 @@ const AdminEditLeave = () => {
 
 	const [users, setUsers] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	useEffect(() => {
 		const loadData = async () => {
@@ -77,7 +81,7 @@ const AdminEditLeave = () => {
 			};
 
 			await api.put(`/Leaves/${id}`, payload);
-			navigate("/admin-dashboard/leaves");
+			navigate(`${basePath}/leaves`);
 		} catch (err) {
 			console.log(err);
 		}
@@ -173,7 +177,7 @@ const AdminEditLeave = () => {
 				<button
 					type="button"
 					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate("/admin-dashboard/leaves")}
+					onClick={() => navigate(`${basePath}/leaves`)}
 				>
 					Cancel
 				</button>

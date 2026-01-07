@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { api } from '../../api.jsx';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const EditBook = () => {
 	const { id } = useParams();
@@ -14,6 +16,8 @@ const EditBook = () => {
 		createdAt: '',
 	});
 	const [bookLoading, setBookLoading] = useState(false);
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	useEffect(() => {
 		const fetchBook = async () => {
@@ -47,7 +51,7 @@ const EditBook = () => {
 			const res = await api.put(`/Books/${id}`, book);
 
 			if (res.data)
-				navigate("/admin-dashboard/storage");
+				navigate(`${basePath}/storage`);
 		} catch (error) {
 			alert("Error");
 		}
@@ -96,7 +100,7 @@ const EditBook = () => {
 				</button>
 				<button type="button"
 					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/storage')}>
+					onClick={() => navigate(`${basePath}/storage`)}>
 						Cancel
 				</button>
 			</form>

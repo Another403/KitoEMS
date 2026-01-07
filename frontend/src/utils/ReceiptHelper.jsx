@@ -80,13 +80,13 @@ export const ReceiptItemColumns = [
 	}
 ]
 
-export const ReceiptButtons = ({id, handleDelete}) => {
+export const ReceiptButtons = ({id, handleDelete, basePath = "/admin-dashboard"}) => {
 	const navigate = useNavigate();
 
 	return (
 		<div className="flex space-x-3 whitespace-nowrap">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				onClick={() => navigate(`/admin-dashboard/receipts/view/${id}`)}>
+				onClick={() => navigate(`${basePath}/receipts/view/${id}`)}>
 					View
 			</button>
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
@@ -97,7 +97,7 @@ export const ReceiptButtons = ({id, handleDelete}) => {
 	)
 }
 
-export const ReceiptItemButtons = ({id, handleDelete, employeeId}) => {
+export const ReceiptItemButtons = ({id, handleDelete, employeeId, basePath = "/admin-dashboard"}) => {
 	const navigate = useNavigate();
 	const { user } = useAuth();
 
@@ -108,7 +108,7 @@ export const ReceiptItemButtons = ({id, handleDelete, employeeId}) => {
 			{ user.userRole !== 'admin' && user.id !== employeeId ? <></> :
 			<>
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				onClick={() => navigate(`/admin-dashboard/receipts/item/edit/${id}`)}>
+				onClick={() => navigate(`${basePath}/receipts/item/edit/${id}`)}>
 					Edit
 			</button>
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"

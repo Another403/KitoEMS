@@ -9,6 +9,8 @@ import { api } from '../../api'
 import CustomInput from '../CustomInput';
 import { ReceiptItemColumns, ReceiptItemButtons } from '../../utils/ReceiptHelper.jsx';
 import ListSkeleton from '../skeletons/ListSkeleton.jsx';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const ViewReceipt = () => {
 	const { id } = useParams();
@@ -16,6 +18,8 @@ const ViewReceipt = () => {
 	const [items, setItems] = useState([]);
 	const [loading, setLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchReceipt = async () => {
 		setLoading(true);
@@ -39,7 +43,7 @@ const ViewReceipt = () => {
 				author: item.book.author,
 				price: item.unitPrice,
 				subTotal: item.subTotal,
-				actions: (<ReceiptItemButtons id={item.id} handleDelete={handleDelete} employeeId={res.data.employeeId}/>)
+				actions: (<ReceiptItemButtons id={item.id} handleDelete={handleDelete} employeeId={res.data.employeeId} basePath={basePath}/>)
 			}));
 
 			setItems(data);
@@ -76,7 +80,7 @@ const ViewReceipt = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to={`/admin-dashboard/receipts/${id}/items/add`}
+					<Link to={`${basePath}/receipts/${id}/items/add`}
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add item
 					</Link>

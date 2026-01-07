@@ -4,12 +4,16 @@ import DataTable from 'react-data-table-component';
 
 import { api } from '../../api.jsx';
 import { CustomerColumns, CustomerButtons } from '../../utils/CustomerHelper';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const CustomersList = () => {
 	const [customers, setCustomers] = useState([]);
 	const [customersLoading, setCustomersLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchCustomers = async () => {
 		setCustomersLoading(true);
@@ -24,7 +28,7 @@ const CustomersList = () => {
 					phoneNumber: customer.phoneNumber,
 					points: customer.points,
 					rank: customer.rank,
-					actions: (<CustomerButtons id={customer.id} handleDelete={handleDelete}/>)
+					actions: (<CustomerButtons id={customer.id} handleDelete={handleDelete} basePath={basePath}/>)
 				}));
 				setCustomers(data);
 			}
@@ -62,7 +66,7 @@ const CustomersList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/customers/add" 
+					<Link to={`${basePath}/customers/add`} 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add customer
 					</Link>

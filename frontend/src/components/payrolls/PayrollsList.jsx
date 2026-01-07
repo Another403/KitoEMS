@@ -4,13 +4,16 @@ import DataTable from 'react-data-table-component';
 
 import { api } from '../../api.jsx';
 import { PayrollColumns, PayrollButtons } from '../../utils/PayrollHelper.jsx';
-import autoprefixer from 'autoprefixer';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths.jsx';
 import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const PayrollsList = () => {
 	const [payrolls, setPayrolls] = useState([]);
 	const [payrollsLoading, setPayrollsLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchPayrolls = async () => {
 		setPayrollsLoading(true);
@@ -26,7 +29,7 @@ const PayrollsList = () => {
 					baseSalary: payroll.baseSalary,
 					bonus: payroll.bonus,
 					total: payroll.total,
-					actions: (<PayrollButtons id={payroll.id} handleDelete={handleDelete}/>)
+					actions: (<PayrollButtons id={payroll.id} handleDelete={handleDelete} basePath={basePath}/>)
 				}));
 				setPayrolls(data);
 			}
@@ -63,7 +66,7 @@ const PayrollsList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/add-payroll" 
+					<Link to={`${basePath}/add-payroll`}
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add payroll
 					</Link>

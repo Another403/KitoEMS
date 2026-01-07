@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import DatePicker from 'react-datepicker';
-import Skeleton from 'react-loading-skeleton';
 
 import { api } from '../../api.jsx';
 import { LeaveColumns, LeaveButtons } from '../../utils/LeaveHelper';
 import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 import ListSkeleton from '../skeletons/ListSkeleton';
 
 const LeavesList = () => {
 	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const [leaves, setLeaves] = useState([]);
 	const [leavesLoading, setLeavesLoading] = useState(false);
@@ -40,7 +41,7 @@ const LeavesList = () => {
 		  			reason: leave.reason,
 		  			status: leave.status,
 					rejectionReason: leave.rejectionReason,
-					actions: (<LeaveButtons id={leave.id} handleDelete={handleDelete} status={leave.status}/>)
+					actions: (<LeaveButtons id={leave.id} handleDelete={handleDelete} status={leave.status} basePath={basePath}/>)
 				}));
 				setLeaves(data);
 			}
@@ -100,7 +101,7 @@ const LeavesList = () => {
 							isClearable
 						/>
 					</div>
-					<Link to="/employee-dashboard/leaves/add" 
+					<Link to={`${basePath}/leaves/add`} 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add leave
 					</Link>

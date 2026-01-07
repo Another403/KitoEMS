@@ -6,11 +6,14 @@ import DatePicker from 'react-datepicker';
 import { api } from '../../api.jsx';
 import { ReceiptButtons, ReceiptColumns } from '../../utils/ReceiptHelper.jsx';
 import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 import ListSkeleton from '../skeletons/ListSkeleton.jsx';
 
 const ReceiptList = () => {
 	const [receipts, setReceipts] = useState([]);
 	const [receiptsLoading, setReceiptsLoading] = useState(false);
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchReceipts = async () => {
 		setReceiptsLoading(true);
@@ -29,7 +32,7 @@ const ReceiptList = () => {
 
 				_createdAt: new Date(receipt.createdAt),
 
-				actions: (<ReceiptButtons id={receipt.id} handleDelete={handleDelete}/>)
+				actions: (<ReceiptButtons id={receipt.id} handleDelete={handleDelete} basePath={basePath}/>)
 			}));
 
 			setReceipts(data);
@@ -78,7 +81,7 @@ const ReceiptList = () => {
 							isClearable
 						/>
 					</div>
-					<Link to="/admin-dashboard/receipts/add" 
+					<Link to={`${basePath}/receipts/add`} 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add Receipt
 					</Link>

@@ -4,14 +4,17 @@ import DataTable from 'react-data-table-component';
 import DatePicker from 'react-datepicker';
 
 import { api } from '../../api.jsx';
-import { AdminLeaveColumns, AdminLeaveButtons } from '../../utils/AdminLeaveHelper';
-import CustomInput from '../CustomInput';
+import { getAdminLeaveColumns } from '../../utils/AdminLeaveHelper';
 import ListSkeleton from '../skeletons/ListSkeleton';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AdminLeavesList = () => {
 	const [leaves, setLeaves] = useState([]);
 	const [leavesLoading, setLeavesLoading] = useState(false);
 	const [searchText, setSearchText] = useState("");
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const [startAfter, setStartAfter] = useState(null);
 	const [endBefore, setEndBefore] = useState(null);
@@ -156,14 +159,14 @@ const AdminLeavesList = () => {
 						</div>
 					</div>
 
-					<Link to="/admin-dashboard/leaves/add" 
+					<Link to={`${basePath}/leaves/add`} 
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add leave
 					</Link>
 				</div>
 				<div className='mt-5'>
 					<DataTable
-						columns={AdminLeaveColumns}
+						columns={getAdminLeaveColumns(basePath)}
 						data={filteredLeaves.map(l => ({
 							...l,
 							handleDelete,

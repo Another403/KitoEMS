@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { api } from "../../api";
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const RejectLeave = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const [rejectionReason, setRejectionReason] = useState('');
 
@@ -17,7 +21,7 @@ const RejectLeave = () => {
 			});
 
 			if (res.status === 200) {
-				navigate('/admin-dashboard/leaves')
+				navigate(`${basePath}/leaves`)
 			}
 		} catch (error) {
 			console.log(error);
@@ -45,7 +49,7 @@ const RejectLeave = () => {
 				<button
 					type="button"
 					className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/leaves')}>
+					onClick={() => navigate(`${basePath}/leaves`)}>
 						Cancel
 				</button>
 			</form>

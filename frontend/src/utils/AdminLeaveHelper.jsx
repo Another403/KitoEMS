@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 
 import { api } from '../api.jsx';
 
-export const AdminLeaveColumns = [
+export const getAdminLeaveColumns = (basePath = "/admin-dashboard") => [
 	{
 		name: "No.",
 		cell: (row, index) => index + 1,
@@ -48,19 +48,20 @@ export const AdminLeaveColumns = [
 				handleDelete={row.handleDelete}
 				handleApprove={row.handleApprove}
 				handleReject={row.handleReject}
+				basePath={basePath}
 			/>
 		),
 		minWidth: "300px"
 	}
 ]
 
-export const AdminLeaveButtons = ({id, handleDelete, handleApprove, handleReject, status}) => {
+export const AdminLeaveButtons = ({id, handleDelete, handleApprove, handleReject, status, basePath = "/admin-dashboard"}) => {
 	const navigate = useNavigate();
 
 	return (
 		<div className="flex space-x-3 whitespace-nowrap">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				onClick={() => navigate(`/admin-dashboard/leaves/edit/${id}`)}>
+				onClick={() => navigate(`${basePath}/leaves/edit/${id}`)}>
 					Edit
 			</button>
 			<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"
@@ -76,7 +77,7 @@ export const AdminLeaveButtons = ({id, handleDelete, handleApprove, handleReject
 			<>{status === "rejected" ? <></> :
 				<button className="px-3 py-1 bg-yellow-600 text-white hover:cursor-pointer hover:bg-yellow-800"
 					//onClick={() => handleReject(id)}
-					onClick={() => navigate(`/admin-dashboard/leaves/${id}/reject`)}>
+					onClick={() => navigate(`${basePath}/leaves/${id}/reject`)}>
 						Reject
 				</button>
 			}</>

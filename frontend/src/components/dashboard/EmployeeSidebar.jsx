@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { FaTachometerAlt, FaInfo, FaUser, FaLayerGroup, FaCalendar, FaRegMoneyBillAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaUndo, FaCalendarTimes, FaRegMoneyBillAlt, FaReceipt, FaCalendarDay, FaUserFriends, FaLayerGroup } from 'react-icons/fa';
 
 import { useAuth } from '../../contexts/AuthContext.jsx';
 
@@ -20,11 +20,6 @@ const EmployeeSidebar = () => {
 					<FaTachometerAlt/>
 					<span>Dashboard</span>
 				</NavLink>
-				<NavLink to={`/employee-dashboard/profile/${user.id}`}
-					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-					<FaUser/>
-					<span>Profile</span>
-				</NavLink>
 				<NavLink to='/employee-dashboard/storage'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
 					<FaLayerGroup/>
@@ -37,13 +32,23 @@ const EmployeeSidebar = () => {
 				</NavLink>
 				<NavLink to='/employee-dashboard/customers'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-					<FaLayerGroup/>
+					<FaUserFriends/>
 					<span>Customers</span>
 				</NavLink>
-				<NavLink to='/employee-dashboard/leaves'
+				<NavLink to='/employee-dashboard/receipts'
 					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
-					<FaLayerGroup/>
-					<span>Leaves</span>
+					<FaReceipt/>
+					<span>Receipts</span>
+				</NavLink>
+				<NavLink to='/employee-dashboard/returns'
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
+					<FaUndo/>
+					<span>Returns</span>
+				</NavLink>
+				<NavLink to='/employee-dashboard/workshifts'
+					className={({isActive}) => `${isActive ? "bg-teal-500" : " " } flex items-center space-x-4 block py-2.5 px-4 rounded`}>
+					<FaCalendarDay/>
+					<span>Workshifts</span>
 				</NavLink>
 			</div>
 		</div>

@@ -5,7 +5,8 @@ import Select from 'react-select';
 
 import "react-datepicker/dist/react-datepicker.css";
 import { api } from '../../api'
-import CustomInput from '../CustomInput';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const ImportBook = () => {
 	const [importData, setImportData] = useState({
@@ -16,6 +17,8 @@ const ImportBook = () => {
 	const [bookId, setBookId] = useState(null);
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchBooks = async () => {
 		setLoading(true);
@@ -54,7 +57,7 @@ const ImportBook = () => {
 			console.log(bookId);
 			const res = await api.put(`/Books/storages/${bookId}`, importData);
 			if (res.data)
-				navigate("/admin-dashboard/storage");
+				navigate(`${basePath}/storage`);
 		} catch (error) {
 			console.log(error);
 			alert("Import failed");
@@ -100,7 +103,7 @@ const ImportBook = () => {
 				<button
 					type="button"
 					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/books')}>
+					onClick={() => navigate(`${basePath}/storage`)}>
 					Cancel
 				</button>
 			</form>

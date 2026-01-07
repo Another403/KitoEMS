@@ -4,12 +4,14 @@ import DataTable from 'react-data-table-component';
 
 import { api } from '../../api';
 import { BookColumns, BookButtons } from '../../utils/BookHelper';
-import autoprefixer from 'autoprefixer';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 import { useAuth } from '../../contexts/AuthContext';
 import ListSkeleton from '../skeletons/ListSkeleton';
 
 const BooksList = () => {
 	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
+	const canManageStorage = user?.userRole === 'admin' || user?.userRole === 'storage_manager';
 
 	const [books, setBooks] = useState([]);
 	const [booksLoading, setBooksLoading] = useState(false);
@@ -31,7 +33,7 @@ const BooksList = () => {
 					author: book.author,
 					price: book.price,
 					quantity: storage ? storage.quantity : 0,
-					actions: <BookButtons id={book.id} handleDelete={handleDelete} />
+					actions: canManageStorage ? <BookButtons id={book.id} handleDelete={handleDelete} basePath={basePath} /> : null
 				};
 			});
 
@@ -73,13 +75,13 @@ const BooksList = () => {
 						className='px-4 py-0.5 border'>
 					</input>
 					<div className='flex space-x-2'>
-						{(user.userRole === 'admin' || user.userRole === 'storage_manager') &&
-							(<Link to="/admin-dashboard/storage/import" 
+						{canManageStorage &&
+							(<Link to={`${basePath}/storage/import`} 
 								className='px-4 py-1 bg-teal-600 rounded text-white'>
 									Import
 							</Link>)}
-						{(user.userRole === 'admin' || user.userRole === 'storage_manager') &&
-							(<Link to="/admin-dashboard/add-book" 
+						{canManageStorage &&
+							(<Link to={`${basePath}/add-book`} 
 								className='px-4 py-1 bg-teal-600 rounded text-white'>
 									Add new book
 							</Link>)}

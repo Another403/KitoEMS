@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { api } from '../../api';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const EditCustomer = () => {
 	const { id } = useParams();
@@ -13,6 +15,8 @@ const EditCustomer = () => {
 	});
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchCustomer = async () => {
 		try {
@@ -45,7 +49,7 @@ const EditCustomer = () => {
 			const res = await api.put(`/Customers/${id}`, customer);
 
 			if (res.status === 200) {
-				navigate("/admin-dashboard/customers");
+				navigate(`${basePath}/customers`);
 			}
 		} catch (error) {
 			console.log(error);
@@ -111,7 +115,7 @@ const EditCustomer = () => {
 				{/* Cancel */}
 				<button
 					type="button"
-					onClick={() => navigate('/admin-dashboard/customers')}
+					onClick={() => navigate(`${basePath}/customers`)}
 					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'>
 					Cancel
 				</button>

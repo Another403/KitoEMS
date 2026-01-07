@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api'
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AddBook = () => {
 	const [book, setBook] = useState({
@@ -11,6 +13,8 @@ const AddBook = () => {
 	});
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const handleChange = (e) => {
 		const {name, value} = e.target;
@@ -23,7 +27,7 @@ const AddBook = () => {
 			const res = await api.post("/Books", book);
 
 			if (res.data)
-				navigate("/admin-dashboard/storage");
+				navigate(`${basePath}/storage`);
 		} catch (error) {
 			alert("Error");
 		}

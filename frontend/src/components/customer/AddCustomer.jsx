@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api';
-import CustomInput from '../CustomInput';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AddCustomer = ({phoneNumber}) => {
 	const [customer, setCustomer] = useState({
@@ -12,6 +13,8 @@ const AddCustomer = ({phoneNumber}) => {
 	});
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -29,7 +32,7 @@ const AddCustomer = ({phoneNumber}) => {
 			const res = await api.post("/Customers", customer);
 
 			if (res.status === 200)
-				navigate("/admin-dashboard/customers");
+				navigate(`${basePath}/customers`);
 		} 
 		catch (error) {
 			console.log(error);
@@ -98,7 +101,7 @@ const AddCustomer = ({phoneNumber}) => {
 				<button
 					type="button"
 					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/customers')}>
+					onClick={() => navigate(`${basePath}/customers`)}>
 					Cancel
 				</button>
 

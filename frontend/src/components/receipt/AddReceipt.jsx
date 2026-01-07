@@ -5,9 +5,11 @@ import Select from 'react-select';
 import { api } from '../../api';
 import CustomInput from '../CustomInput';
 import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const AddReceipt = () => {
 	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const [receipt, setReceipt] = useState({
 		items: [],
@@ -79,7 +81,7 @@ const AddReceipt = () => {
 			const res = await api.post("/Receipts", receiptPayload);
 
 			if (res.status === 200)
-				navigate(`/admin-dashboard/receipts/view/${res.data.id}`);
+				navigate(`${basePath}/receipts/view/${res.data.id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -168,7 +170,7 @@ const AddReceipt = () => {
 				<button
 					type="button"
 					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate('/admin-dashboard/receipts')}>
+					onClick={() => navigate(`${basePath}/receipts`)}>
 					Cancel
 				</button>
 

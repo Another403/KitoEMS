@@ -4,10 +4,14 @@ import Select from 'react-select';
 
 import { api } from '../../api';
 import CustomInput from '../CustomInput';
+import { useAuth } from '../../contexts/AuthContext';
+import { getDashboardBasePath } from '../../utils/dashboardPaths';
 
 const EditReceiptItem = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const [item, setItem] = useState({});
 	const [books, setBooks] = useState([]);
@@ -67,7 +71,7 @@ const EditReceiptItem = () => {
 			const res = await api.put(`/Receipts/items/${id}`, item);
 
 			if (res.status === 200)
-				navigate(`/admin-dashboard/receipts/view/${item.receiptId}`);
+				navigate(`${basePath}/receipts/view/${item.receiptId}`);
 		} 
 		catch (error) {
 			console.log(error);
@@ -142,7 +146,7 @@ const EditReceiptItem = () => {
 				<button
 					type="button"
 					className='w-full mt-3 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-					onClick={() => navigate(`/admin-dashboard/receipts/view/${item.receiptId}`)}>
+					onClick={() => navigate(`${basePath}/receipts/view/${item.receiptId}`)}>
 					Cancel
 				</button>
 

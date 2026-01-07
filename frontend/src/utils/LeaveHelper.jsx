@@ -40,14 +40,14 @@ export const LeaveColumns = [
 	}
 ]
 
-export const LeaveButtons = ({id, handleDelete, status}) => {
+export const LeaveButtons = ({id, handleDelete, status, basePath = "/employee-dashboard"}) => {
 	const navigate = useNavigate();
 
 	return (
 		<> {status !== "pending" ? <>None</> :
 			<div className="flex space-x-3 whitespace-nowrap">
 				<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-					onClick={() => navigate(`/employee-dashboard/leaves/edit/${id}`)}>
+					onClick={() => navigate(`${basePath}/leaves/edit/${id}`)}>
 						Edit
 				</button>
 				<button className="px-3 py-1 bg-red-600 text-white hover:cursor-pointer hover:bg-red-800"

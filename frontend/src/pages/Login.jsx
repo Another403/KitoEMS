@@ -27,11 +27,14 @@ const Login = () => {
 			localStorage.setItem("token", res.data.token);
 			localStorage.setItem("refreshToken", res.data.refreshToken);
 
-			if (res.data.user.userRole === "admin") {
-				navigate('/admin-dashboard');
-			} else {
-				navigate('/employee-dashboard');
-			}
+			const roleRoutes = {
+				admin: '/admin-dashboard',
+				storage_manager: '/storage-manager-dashboard',
+				hr_manager: '/hr-manager-dashboard',
+				employee: '/employee-dashboard'
+			};
+
+			navigate(roleRoutes[res.data.user.userRole] || '/employee-dashboard');
 
 			//console.log(localStorage.getItem("token"));
 			//console.log(localStorage.getItem("refreshToken"));

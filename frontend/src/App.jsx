@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import AdminDashboard from './pages/AdminDashboard';
 import EmployeeDashboard from './pages/EmployeeDashboard';
+import StorageManagerDashboard from './pages/StorageManagerDashboard';
+import HrManagerDashboard from './pages/HrManagerDashboard';
 import PrivateRoutes from './utils/PrivateRoutes';
 import RoleBasedRoutes from './utils/RoleBasedRoutes';
 import AdminSummary from './components/dashboard/AdminSummary';
@@ -37,12 +39,24 @@ import Reports from './components/report/Reports';
 import Returns from './components/return/Returns';
 //import Calendar from './components/workshift/Calendar';
 
+import { useAuth } from './contexts/AuthContext.jsx';
+import { getDashboardBasePath } from './utils/dashboardPaths';
+
+const HomeRedirect = () => {
+	const { user, loading } = useAuth();
+
+	if (loading) return <div>Loading...</div>;
+	if (!user) return <Navigate to="/login" replace />;
+
+	return <Navigate to={getDashboardBasePath(user.userRole)} replace />;
+};
+
 const App = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
 				{/* ADMIN DASHBOARD */}
-				<Route path = "/" element={<Navigate to="/admin-dashboard"/>}/>
+				<Route path = "/" element={<HomeRedirect/>}/>
 				<Route path = "/admin-dashboard" element={
 					<PrivateRoutes>
 						<RoleBasedRoutes requiredRoles={["admin"]}>
@@ -100,13 +114,12 @@ const App = () => {
 				{/* EMPLOYEE DASHBOARD */}
 				<Route path = "/employee-dashboard" element={
 					<PrivateRoutes>
-						<RoleBasedRoutes requiredRoles={["admin, employee"]}>
+						<RoleBasedRoutes requiredRoles={["employee"]}>
 							<EmployeeDashboard/>
 						</RoleBasedRoutes>
 					</PrivateRoutes>
 				}>
-					<Route index element={<></>}></Route>
-					<Route path="/employee-dashboard/profile/:id" element={<ViewEmployee/>}></Route>
+					<Route index element={<AdminSummary/>}></Route>
 
 					{/* Customers */}
 					<Route path="/employee-dashboard/customers" element={<CustomersList/>}></Route>
@@ -120,6 +133,112 @@ const App = () => {
 
 					{/* Storage */}
 					<Route path="/employee-dashboard/storage" element={<BooksList/>}></Route>
+
+					{/* Payrolls */}
+					<Route path="/employee-dashboard/payrolls" element={<PayrollsList/>}></Route>
+					<Route path="/employee-dashboard/add-payroll" element={<AddPayroll/>}></Route>
+					<Route path="/employee-dashboard/payrolls/edit/:id" element={<EditPayroll/>}></Route>
+
+					{/* Receipts */}
+					<Route path="/employee-dashboard/receipts" element={<ReceiptList/>}></Route>
+					<Route path="/employee-dashboard/receipts/add" element={<AddReceipt/>}></Route>
+					<Route path="/employee-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
+					<Route path="/employee-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
+					<Route path="/employee-dashboard/receipts/item/edit/:id" element={<EditReceiptItem/>}></Route>
+
+					{/* Returns */}
+					<Route path="/employee-dashboard/returns" element={<Returns/>}></Route>
+
+					{/* Work shifts */}
+					<Route path="/employee-dashboard/workshifts" element={<WorkshiftScheduler readOnly/>}></Route>
+				</Route>
+
+				{/* STORAGE MANAGER DASHBOARD */}
+				<Route path = "/storage-manager-dashboard" element={
+					<PrivateRoutes>
+						<RoleBasedRoutes requiredRoles={["storage_manager"]}>
+							<StorageManagerDashboard/>
+						</RoleBasedRoutes>
+					</PrivateRoutes>
+				}>
+					<Route index element={<AdminSummary/>}></Route>
+
+					{/* Storage */}
+					<Route path="/storage-manager-dashboard/storage" element={<BooksList/>}></Route>
+					<Route path="/storage-manager-dashboard/add-book" element={<AddBook/>}></Route>
+					<Route path="/storage-manager-dashboard/storage/:id" element={<EditBook/>}></Route>
+					<Route path="/storage-manager-dashboard/storage/import" element={<ImportBook/>}></Route>
+
+					{/* Leaves */}
+					<Route path="/storage-manager-dashboard/leaves" element={<LeavesList/>}></Route>
+					<Route path="/storage-manager-dashboard/leaves/add" element={<AddLeave/>}></Route>
+					<Route path="/storage-manager-dashboard/leaves/edit/:id" element={<EditLeave/>}></Route>
+
+					{/* Payrolls */}
+					<Route path="/storage-manager-dashboard/payrolls" element={<PayrollsList/>}></Route>
+					<Route path="/storage-manager-dashboard/add-payroll" element={<AddPayroll/>}></Route>
+					<Route path="/storage-manager-dashboard/payrolls/edit/:id" element={<EditPayroll/>}></Route>
+
+					{/* Customers */}
+					<Route path="/storage-manager-dashboard/customers" element={<CustomersList/>}></Route>
+					<Route path="/storage-manager-dashboard/customers/add" element={<AddCustomer/>}></Route>
+					<Route path="/storage-manager-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
+
+					{/* Receipts */}
+					<Route path="/storage-manager-dashboard/receipts" element={<ReceiptList/>}></Route>
+					<Route path="/storage-manager-dashboard/receipts/add" element={<AddReceipt/>}></Route>
+					<Route path="/storage-manager-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
+					<Route path="/storage-manager-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
+					<Route path="/storage-manager-dashboard/receipts/item/edit/:id" element={<EditReceiptItem/>}></Route>
+
+					{/* Returns */}
+					<Route path="/storage-manager-dashboard/returns" element={<Returns/>}></Route>
+
+					{/* Work shifts */}
+					<Route path="/storage-manager-dashboard/workshifts" element={<WorkshiftScheduler readOnly/>}></Route>
+				</Route>
+
+				{/* HR MANAGER DASHBOARD */}
+				<Route path = "/hr-manager-dashboard" element={
+					<PrivateRoutes>
+						<RoleBasedRoutes requiredRoles={["hr_manager"]}>
+							<HrManagerDashboard/>
+						</RoleBasedRoutes>
+					</PrivateRoutes>
+				}>
+					<Route index element={<AdminSummary/>}></Route>
+
+					{/* AdminLeaves */}
+					<Route path="/hr-manager-dashboard/leaves" element={<AdminLeavesList/>}></Route>
+					<Route path="/hr-manager-dashboard/leaves/add" element={<AdminAddLeave/>}></Route>
+					<Route path="/hr-manager-dashboard/leaves/edit/:id" element={<AdminEditLeave/>}></Route>
+					<Route path="/hr-manager-dashboard/leaves/:id/reject" element={<RejectLeave/>}></Route>
+
+					{/* Storage */}
+					<Route path="/hr-manager-dashboard/storage" element={<BooksList/>}></Route>
+
+					{/* Payrolls */}
+					<Route path="/hr-manager-dashboard/payrolls" element={<PayrollsList/>}></Route>
+					<Route path="/hr-manager-dashboard/add-payroll" element={<AddPayroll/>}></Route>
+					<Route path="/hr-manager-dashboard/payrolls/edit/:id" element={<EditPayroll/>}></Route>
+
+					{/* Customers */}
+					<Route path="/hr-manager-dashboard/customers" element={<CustomersList/>}></Route>
+					<Route path="/hr-manager-dashboard/customers/add" element={<AddCustomer/>}></Route>
+					<Route path="/hr-manager-dashboard/customers/edit/:id" element={<EditCustomer/>}></Route>
+
+					{/* Receipts */}
+					<Route path="/hr-manager-dashboard/receipts" element={<ReceiptList/>}></Route>
+					<Route path="/hr-manager-dashboard/receipts/add" element={<AddReceipt/>}></Route>
+					<Route path="/hr-manager-dashboard/receipts/view/:id" element={<ViewReceipt/>}></Route>
+					<Route path="/hr-manager-dashboard/receipts/:id/items/add" element={<AddReceiptItem/>}></Route>
+					<Route path="/hr-manager-dashboard/receipts/item/edit/:id" element={<EditReceiptItem/>}></Route>
+
+					{/* Returns */}
+					<Route path="/hr-manager-dashboard/returns" element={<Returns/>}></Route>
+
+					{/* Work shifts */}
+					<Route path="/hr-manager-dashboard/workshifts" element={<WorkshiftScheduler/>}></Route>
 				</Route>
 
 				<Route path = "/login" element={<Login/>}/>

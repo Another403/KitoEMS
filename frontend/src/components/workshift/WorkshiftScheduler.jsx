@@ -5,7 +5,7 @@ import Calendar from "./Calendar";
 
 import { api } from "../../api";
 
-const WorkshiftScheduler = () => {
+const WorkshiftScheduler = ({ readOnly = false }) => {
 	const [employees, setEmployees] = useState([]);
 	const [editingId, setEditingId] = useState("");
 
@@ -85,6 +85,7 @@ const WorkshiftScheduler = () => {
 	}, [events]);
 
 	const handleEditStart = async (shiftId) => {
+		if (readOnly) return;
 		console.log(shiftId);
 		setEditingId(shiftId);
 
@@ -256,156 +257,162 @@ const WorkshiftScheduler = () => {
 				</div>
 			</div>
 
-			<div className="grid gap-6 xl:grid-cols-[360px_1fr]">
-				<form
-					className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
-					onSubmit={handleSubmit}
-				>
-					<div>
-						<h2 className="text-lg font-semibold text-slate-800">
-							{editingId
-								? "Edit a shift"
-								: "Schedule a new shift"}
-						</h2>
-						<p className="text-xs text-slate-500">
-							{editingId
-								? "Modify shift details"
-								: "Add the shift details and assign an employee."}
-						</p>
-					</div>
-
-					<div className="text-sm font-medium text-slate-600">
-						<p>Employee</p>
-						<div className="mt-1">
-							<Select
-								options={employees}
-								onChange={(e) =>
-									setWorkshift((prev) => ({
-										...prev,
-										employee: e,
-										employeeId: e.value,
-									}))
-								}
-								value={workshift.employee}
-								placeholder="Select employee"
-								isSearchable={true}
-							/>
-						</div>
-					</div>
-
-					<label className="block text-sm font-medium text-slate-600">
-						Role / Shift type
-						<input
-							type="text"
-							name="shiftType"
-							value={workshift.shiftType}
-							onChange={handleChange}
-							placeholder="Morning shift, Audit, Support"
-							className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-						/>
-					</label>
-
-					<div className="grid gap-4 md:grid-cols-2">
-						<label className="block text-sm font-medium text-slate-600">
-							Date
-							<input
-								type="date"
-								name="date"
-								value={workshift.date}
-								onChange={handleChange}
-								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-							/>
-						</label>
-						<label className="block text-sm font-medium text-slate-600">
-							Location
-							<select
-								name="location"
-								value={workshift.location}
-								onChange={handleChange}
-								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-							>
-								<option>Warehouse</option>
-								<option>Downtown Store</option>
-								<option>Remote Support</option>
-							</select>
-						</label>
-					</div>
-
-					<div className="grid gap-4 md:grid-cols-2">
-						<label className="block text-sm font-medium text-slate-600">
-							Start time
-							<input
-								type="time"
-								name="startTime"
-								value={workshift.startTime}
-								onChange={handleChange}
-								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-							/>
-						</label>
-						<label className="block text-sm font-medium text-slate-600">
-							End time
-							<input
-								type="time"
-								name="endTime"
-								value={workshift.endTime}
-								onChange={handleChange}
-								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-							/>
-						</label>
-					</div>
-
-					<label className="block text-sm font-medium text-slate-600">
-						Note
-						<textarea
-							name="note"
-							value={workshift.note}
-							onChange={handleChange}
-							rows={3}
-							placeholder="Coverage goals, break times, special instructions."
-							className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
-						/>
-					</label>
-
-					<button
-						type="submit"
-						disabled={
-							!workshift.employeeId ||
-							!workshift.date ||
-							!workshift.startTime ||
-							!workshift.endTime
-						}
-						className="w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition
-							hover:cursor-pointer hover:bg-teal-700 
-							disabled:cursor-not-allowed disabled:bg-teal-200"
+			<div
+				className={`grid gap-6 ${
+					readOnly ? "xl:grid-cols-1" : "xl:grid-cols-[360px_1fr]"
+				}`}
+			>
+				{!readOnly && (
+					<form
+						className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"
+						onSubmit={handleSubmit}
 					>
-						{editingId ? "Edit" : "Add shift to schedule"}
-					</button>
-					{editingId && (
+						<div>
+							<h2 className="text-lg font-semibold text-slate-800">
+								{editingId
+									? "Edit a shift"
+									: "Schedule a new shift"}
+							</h2>
+							<p className="text-xs text-slate-500">
+								{editingId
+									? "Modify shift details"
+									: "Add the shift details and assign an employee."}
+							</p>
+						</div>
+
+						<div className="text-sm font-medium text-slate-600">
+							<p>Employee</p>
+							<div className="mt-1">
+								<Select
+									options={employees}
+									onChange={(e) =>
+										setWorkshift((prev) => ({
+											...prev,
+											employee: e,
+											employeeId: e.value,
+										}))
+									}
+									value={workshift.employee}
+									placeholder="Select employee"
+									isSearchable={true}
+								/>
+							</div>
+						</div>
+
+						<label className="block text-sm font-medium text-slate-600">
+							Role / Shift type
+							<input
+								type="text"
+								name="shiftType"
+								value={workshift.shiftType}
+								onChange={handleChange}
+								placeholder="Morning shift, Audit, Support"
+								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+							/>
+						</label>
+
+						<div className="grid gap-4 md:grid-cols-2">
+							<label className="block text-sm font-medium text-slate-600">
+								Date
+								<input
+									type="date"
+									name="date"
+									value={workshift.date}
+									onChange={handleChange}
+									className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+								/>
+							</label>
+							<label className="block text-sm font-medium text-slate-600">
+								Location
+								<select
+									name="location"
+									value={workshift.location}
+									onChange={handleChange}
+									className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+								>
+									<option>Warehouse</option>
+									<option>Downtown Store</option>
+									<option>Remote Support</option>
+								</select>
+							</label>
+						</div>
+
+						<div className="grid gap-4 md:grid-cols-2">
+							<label className="block text-sm font-medium text-slate-600">
+								Start time
+								<input
+									type="time"
+									name="startTime"
+									value={workshift.startTime}
+									onChange={handleChange}
+									className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+								/>
+							</label>
+							<label className="block text-sm font-medium text-slate-600">
+								End time
+								<input
+									type="time"
+									name="endTime"
+									value={workshift.endTime}
+									onChange={handleChange}
+									className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+								/>
+							</label>
+						</div>
+
+						<label className="block text-sm font-medium text-slate-600">
+							Note
+							<textarea
+								name="note"
+								value={workshift.note}
+								onChange={handleChange}
+								rows={3}
+								placeholder="Coverage goals, break times, special instructions."
+								className="mt-1 w-full rounded-lg border border-slate-200 px-3 py-2 text-sm text-slate-700 focus:border-slate-400 focus:outline-none"
+							/>
+						</label>
+
 						<button
-							type="button"
-							className="w-full rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-white transition 
-							hover:cursor-pointer hover:bg-yellow-700 
-							disabled:cursor-not-allowed disabled:bg-yellow-200"
-							onClick={handleCancelEdit}
+							type="submit"
+							disabled={
+								!workshift.employeeId ||
+								!workshift.date ||
+								!workshift.startTime ||
+								!workshift.endTime
+							}
+							className="w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition
+								hover:cursor-pointer hover:bg-teal-700 
+								disabled:cursor-not-allowed disabled:bg-teal-200"
 						>
-							Cancel edit
+							{editingId ? "Edit" : "Add shift to schedule"}
 						</button>
-					)}
-					{editingId && (
-						<button
-							type="button"
-							className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition 
-							hover:cursor-pointer hover:bg-red-700 
-							disabled:cursor-not-allowed disabled:bg-red-200"
-							onClick={handleDelete}
-						>
-							Delete
-						</button>
-					)}
-				</form>
+						{editingId && (
+							<button
+								type="button"
+								className="w-full rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-white transition 
+								hover:cursor-pointer hover:bg-yellow-700 
+								disabled:cursor-not-allowed disabled:bg-yellow-200"
+								onClick={handleCancelEdit}
+							>
+								Cancel edit
+							</button>
+						)}
+						{editingId && (
+							<button
+								type="button"
+								className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition 
+								hover:cursor-pointer hover:bg-red-700 
+								disabled:cursor-not-allowed disabled:bg-red-200"
+								onClick={handleDelete}
+							>
+								Delete
+							</button>
+						)}
+					</form>
+				)}
 
 				<div className="flex flex-col gap-6">
-					<Calendar events={events} onEventClick={handleEditStart} />
+					<Calendar events={events} onEventClick={readOnly ? undefined : handleEditStart} />
 
 					<div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
 						<div className="mb-3 flex items-center justify-between">
