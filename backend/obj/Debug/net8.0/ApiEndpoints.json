@@ -1055,6 +1055,22 @@
   },
   {
     "ContainingType": "backend.Controllers.ReturnsController",
+    "Method": "DeleteReturn",
+    "RelativePath": "api/Returns/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "backend.Controllers.ReturnsController",
     "Method": "GetReceipts",
     "RelativePath": "api/Returns/receipts",
     "HttpMethod": "GET",
@@ -1089,7 +1105,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "System.Collections.Generic.List\u00601[[backend.Models.ReceiptItem, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "Type": "System.Collections.Generic.List\u00601[[backend.Models.Dto.ReceiptReturnItemModel, backend, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",

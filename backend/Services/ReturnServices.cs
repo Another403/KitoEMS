@@ -28,6 +28,13 @@ public class ReturnService
 		if (receipt == null)
 			throw new ArgumentException("Receipt not found.");
 
+		var returnedQuantities = await _context.ReturnDetails
+				.Include(rd => rd.Return)
+				.Where(rd => rd.Return != null && rd.Return.ReceiptId == receipt.Id)
+				.GroupBy(rd => rd.BookId)
+				.Select(g => new { g.Key, Quantity = g.Sum(rd => rd.Quantity) })
+				.ToDictionaryAsync(g => g.Key, g => g.Quantity);
+
 		var returnRecord = new Return
 		{
 			ReceiptId = receipt.Id,
@@ -45,8 +52,13 @@ public class ReturnService
 			if (receiptItem == null)
 				throw new ArgumentException("Item was not found on the receipt.");
 
-			if (item.Quantity > receiptItem.Quantity)
-				throw new ArgumentException("Return quantity cannot exceed purchased quantity.");
+			var alreadyReturned = returnedQuantities.TryGetValue(item.BookId, out var returnedQty)
+					? returnedQty
+					: 0;
+			var returnableQuantity = receiptItem.Quantity - alreadyReturned;
+
+			if (item.Quantity > returnableQuantity)
+				throw new ArgumentException("Return quantity cannot exceed remaining returnable quantity.");
 
 			var refund = receiptItem.UnitPrice * item.Quantity;
 			totalRefund += refund;
@@ -86,5 +98,50 @@ public class ReturnService
 		await _context.SaveChangesAsync();
 
 		return returnRecord;
+	}
+
+	public async Task DeleteReturnAsync(Guid returnId)
+	{
+		var returnRecord = await _context.Returns
+				.Include(r => r.Items)
+				.Include(r => r.Receipt)
+				.FirstOrDefaultAsync(r => r.Id == returnId);
+
+		if (returnRecord == null)
+			throw new ArgumentException("Return not found.");
+
+		if (returnRecord.Receipt == null)
+			throw new ArgumentException("Associated receipt not found.");
+
+		foreach (var item in returnRecord.Items)
+		{
+			var storage = await _context.Storages.FirstOrDefaultAsync(s => s.Id == item.BookId);
+			if (storage == null)
+				throw new ArgumentException("Storage not found.");
+
+			if (storage.Quantity < item.Quantity)
+				throw new ArgumentException("Not enough stock to undo this return.");
+
+			storage.Quantity -= item.Quantity;
+		}
+
+		var receipt = returnRecord.Receipt;
+		var previousPoints = receipt.PointsEarned;
+		receipt.Total += returnRecord.TotalRefund;
+		receipt.PointsEarned = _billingService.CalculatePoints(receipt.Total);
+
+		if (!string.IsNullOrEmpty(receipt.CustomerPhone))
+		{
+			var customer = await _context.Customers
+					.FirstOrDefaultAsync(c => c.PhoneNumber == receipt.CustomerPhone);
+
+			if (customer != null)
+			{
+				customer.Points = Math.Max(0, customer.Points + (receipt.PointsEarned - previousPoints));
+			}
+		}
+
+		_context.Returns.Remove(returnRecord);
+		await _context.SaveChangesAsync();
 	}
 }

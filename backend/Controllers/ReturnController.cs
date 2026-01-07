@@ -28,6 +28,7 @@ public class ReturnsController : ControllerBase
 				.ThenInclude(i => i.Book)
 				.Include(r => r.Receipt)
 				.ThenInclude(rc => rc!.Customer)
+				.OrderByDescending(r => r.ReturnDate)
 				.ToListAsync();
 
 		return Ok(returns);
@@ -46,7 +47,7 @@ public class ReturnsController : ControllerBase
 	}
 
 	[HttpGet("receipts/{id}/items")]
-	public async Task<ActionResult<List<ReceiptItem>>> GetReceiptItems(Guid id)
+	public async Task<ActionResult<List<ReceiptReturnItemModel>>> GetReceiptItems(Guid id)
 	{
 		var items = await _context.ReceiptItems
 				.Include(i => i.Book)
@@ -56,7 +57,33 @@ public class ReturnsController : ControllerBase
 		if (items.Count == 0)
 			return NotFound(new { message = "No items found for this receipt." });
 
-		return Ok(items);
+		var returnedQuantities = await _context.ReturnDetails
+				.Include(rd => rd.Return)
+				.Where(rd => rd.Return != null && rd.Return.ReceiptId == id)
+				.GroupBy(rd => rd.BookId)
+				.Select(g => new { g.Key, Quantity = g.Sum(rd => rd.Quantity) })
+				.ToDictionaryAsync(g => g.Key, g => g.Quantity);
+
+		var result = items.Select(item =>
+		{
+			var returnedQuantity = returnedQuantities.TryGetValue(item.BookId, out var returnedQty)
+					? returnedQty
+					: 0;
+			var returnableQuantity = Math.Max(0, item.Quantity - returnedQuantity);
+
+			return new ReceiptReturnItemModel
+			{
+				Id = item.Id,
+				BookId = item.BookId,
+				Book = item.Book,
+				Quantity = item.Quantity,
+				UnitPrice = item.UnitPrice,
+				ReturnedQuantity = returnedQuantity,
+				ReturnableQuantity = returnableQuantity
+			};
+		}).ToList();
+
+		return Ok(result);
 	}
 
 	[HttpPost]
@@ -73,6 +100,20 @@ public class ReturnsController : ControllerBase
 					.FirstOrDefaultAsync(r => r.Id == created.Id);
 
 			return Ok(detailed);
+		}
+		catch (Exception ex)
+		{
+			return BadRequest(new { message = ex.Message });
+		}
+	}
+
+	[HttpDelete("{id}")]
+	public async Task<IActionResult> DeleteReturn(Guid id)
+	{
+		try
+		{
+			await _service.DeleteReturnAsync(id);
+			return Ok(new { message = "Return deleted successfully." });
 		}
 		catch (Exception ex)
 		{

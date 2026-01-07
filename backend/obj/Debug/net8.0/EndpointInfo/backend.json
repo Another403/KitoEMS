@@ -1822,7 +1822,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReceiptItem"
+                    "$ref": "#/components/schemas/ReceiptReturnItemModel"
                   }
                 }
               },
@@ -1830,7 +1830,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReceiptItem"
+                    "$ref": "#/components/schemas/ReceiptReturnItemModel"
                   }
                 }
               },
@@ -1838,11 +1838,34 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ReceiptItem"
+                    "$ref": "#/components/schemas/ReceiptReturnItemModel"
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Returns/{id}": {
+      "delete": {
+        "tags": [
+          "Returns"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2473,6 +2496,39 @@
             "type": "number",
             "format": "double",
             "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReceiptReturnItemModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "bookId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "book": {
+            "$ref": "#/components/schemas/Book"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitPrice": {
+            "type": "number",
+            "format": "double"
+          },
+          "returnedQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "returnableQuantity": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
