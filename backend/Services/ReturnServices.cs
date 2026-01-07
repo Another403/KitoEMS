@@ -1,5 +1,4 @@
-﻿
-using backend.Data;
+﻿using backend.Data;
 using backend.Models;
 using backend.Models.Dto;
 using Microsoft.EntityFrameworkCore;

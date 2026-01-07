@@ -17,7 +17,7 @@ const BestSellerChart = ({ data, isAnimationActive = true }) => {
 		<ResponsiveContainer width="90%" height="90%">
 			<BarChart data={data}>
 				<CartesianGrid strokeDasharray="3 3"/>
-				<Tooltip/>
+				<Tooltip cursor={false}/>
 				<Legend/>
 				<XAxis
 					dataKey="name" 
@@ -25,7 +25,7 @@ const BestSellerChart = ({ data, isAnimationActive = true }) => {
 					interval={0}
 					tickFormatter={(v) => truncate(v, 14)}
 				/>
-				<YAxis width="auto" dataKey="quantity"/>
+				<YAxis width="50" dataKey="quantity"/>
 				<Bar barSize="60" dataKey="quantity" fill="#14b8a6" isAnimationActive={isAnimationActive}></Bar>
 			</BarChart>
 		</ResponsiveContainer>

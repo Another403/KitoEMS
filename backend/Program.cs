@@ -66,6 +66,7 @@ builder.Services.AddCors(options =>
 	});
 });
 builder.Services.AddScoped<BillingService>();
+builder.Services.AddScoped<ReturnService>();
 
 #endregion SERVICES
 

@@ -374,14 +374,18 @@ const WorkshiftScheduler = () => {
 							!workshift.startTime ||
 							!workshift.endTime
 						}
-						className="w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-teal-700 disabled:cursor-not-allowed disabled:bg-teal-200"
+						className="w-full rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white transition
+							hover:cursor-pointer hover:bg-teal-700 
+							disabled:cursor-not-allowed disabled:bg-teal-200"
 					>
 						{editingId ? "Edit" : "Add shift to schedule"}
 					</button>
 					{editingId && (
 						<button
 							type="button"
-							className="w-full rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-yellow-700 disabled:cursor-not-allowed disabled:bg-yellow-200"
+							className="w-full rounded-lg bg-yellow-600 px-4 py-2 text-sm font-semibold text-white transition 
+							hover:cursor-pointer hover:bg-yellow-700 
+							disabled:cursor-not-allowed disabled:bg-yellow-200"
 							onClick={handleCancelEdit}
 						>
 							Cancel edit
@@ -390,7 +394,9 @@ const WorkshiftScheduler = () => {
 					{editingId && (
 						<button
 							type="button"
-							className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-red-200"
+							className="w-full rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white transition 
+							hover:cursor-pointer hover:bg-red-700 
+							disabled:cursor-not-allowed disabled:bg-red-200"
 							onClick={handleDelete}
 						>
 							Delete
