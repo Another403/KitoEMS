@@ -226,7 +226,7 @@ const Returns = () => {
 				<button
 					type="button"
 					onClick={() => handleDeleteReturn(row.id)}
-					className="text-sm text-red-600 hover:underline disabled:text-red-300"
+					className="text-sm text-red-600 hover:underline disabled:text-red-300 hover:cursor-pointer"
 					disabled={deletingReturnId === row.id}
 				>
 					{deletingReturnId === row.id ? "Deleting..." : "Delete"}
@@ -293,7 +293,7 @@ const Returns = () => {
 								setReceiptItems([]);
 								setStatusMessage(null);
 							}}
-							className="text-sm text-teal-700 hover:underline"
+							className="text-sm text-teal-700 hover:underline hover:cursor-pointer"
 						>
 							Clear selection
 						</button>
@@ -493,7 +493,7 @@ const Returns = () => {
 								<button
 									type="submit"
 									disabled={submitting || loadingItems}
-									className={`mt-2 px-4 py-2 rounded text-white ${
+									className={`mt-2 px-4 py-2 rounded text-white hover:cursor-pointer ${
 										submitting || loadingItems
 											? "bg-teal-300 cursor-not-allowed"
 											: "bg-teal-600 hover:bg-teal-700"
