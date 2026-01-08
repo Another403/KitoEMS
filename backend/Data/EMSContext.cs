@@ -71,14 +71,6 @@ public class EMSContext : IdentityDbContext
 				.Property(b => b.Price)
 				.HasPrecision(18, 2);
 
-		builder.Entity<Order>()
-			.Property(o => o.Total)
-			.HasPrecision(18, 2);
-
-		builder.Entity<OrderDetail>()
-			.Property(od => od.Total)
-			.HasPrecision(18, 2);
-
 		builder.Entity<Payroll>()
 			.Property(p => p.BaseSalary)
 			.HasPrecision(18, 2);
@@ -110,8 +102,6 @@ public class EMSContext : IdentityDbContext
 	public DbSet<Book> Books { get; set; }
 	public DbSet<Customer> Customers { get; set; }
 	public DbSet<Leave> Leaves { get; set; }
-	public DbSet<Order> Orders { get; set; }
-	public DbSet<OrderDetail> OrderDetails { get; set; }
 	public DbSet<Payroll> Payrolls { get; set; }
 	public DbSet<Return> Returns { get; set; }
 	public DbSet<ReturnDetail> ReturnDetails { get; set; }
