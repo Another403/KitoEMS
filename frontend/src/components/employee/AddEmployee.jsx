@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { api } from '../../api.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths'
+
 
 const AddEmployee = () => {
 	const [formData, setFormData] = useState({
@@ -17,6 +20,8 @@ const AddEmployee = () => {
 	const [showPassword, setShowPassword] = useState(false);
 
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const handleChange = (e) => {
 		const {name, value, files} = e.target;
@@ -53,7 +58,7 @@ const AddEmployee = () => {
 			);
 
 			if (res.status === 200) {
-				navigate('/admin-dashboard/employees');
+				navigate(`${basePath}/employees`);
 			}
 		} catch (error) {
 			console.log(error);

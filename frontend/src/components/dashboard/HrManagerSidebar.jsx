@@ -8,6 +8,7 @@ import {
 	FaReceipt,
 	FaCalendarDay,
 	FaUserFriends,
+	FaUser
 } from "react-icons/fa";
 
 const HrManagerSidebar = () => {
@@ -30,6 +31,17 @@ const HrManagerSidebar = () => {
 					<span>Dashboard</span>
 				</NavLink>
 				<NavLink
+					to="/hr-manager-dashboard/employees"
+					className={({ isActive }) =>
+						`${
+							isActive ? "bg-teal-500" : " "
+						} flex items-center space-x-4 block py-2.5 px-4 rounded`
+					}
+				>
+					<FaUser />
+					<span>Employees</span>
+				</NavLink>
+				<NavLink
 					to="/hr-manager-dashboard/leaves"
 					className={({ isActive }) =>
 						`${
@@ -38,7 +50,7 @@ const HrManagerSidebar = () => {
 					}
 				>
 					<FaCalendarTimes />
-					<span>Admin Leaves</span>
+					<span>Leaves</span>
 				</NavLink>
 				<NavLink
 					to="/hr-manager-dashboard/payrolls"

@@ -2,11 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { api } from '../../api.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths'
 
 const ViewEmployee = () => {
 	const { id } = useParams();
 	const [employee, setEmployee] = useState({});
 	const [employeeLoading, setEmployeeLoading] = useState(false);
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	useEffect(() => {
 		const fetchEmployee = async () => {

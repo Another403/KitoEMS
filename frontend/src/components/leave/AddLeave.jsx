@@ -20,6 +20,7 @@ const AdminAddLeave = () => {
 	});
 
 	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 	const navigate = useNavigate();
 
 	const handleChange = (e) => {

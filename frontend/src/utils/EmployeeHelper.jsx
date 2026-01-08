@@ -41,17 +41,17 @@ export const EmployeeColumns = [
 	}
 ]
 
-export const EmployeeButtons = ({id, deleteable, handleDelete}) => {
+export const EmployeeButtons = ({id, deleteable, handleDelete, basePath = "/admin-dashboard"}) => {
 	const navigate = useNavigate();
 
 	return (
 		<div className="flex space-x-3 whitespace-nowrap">
 			<button className="px-3 py-1 bg-teal-600 text-white hover:cursor-pointer hover:bg-teal-800"
-				onClick={() => navigate(`/admin-dashboard/employees/edit/${id}`)}>
+				onClick={() => navigate(`${basePath}/employees/edit/${id}`)}>
 					Edit
 			</button>
 			<button className="px-3 py-1 bg-green-600 text-white hover:cursor-pointer hover:bg-green-800"
-				onClick={() => navigate(`/admin-dashboard/employees/${id}`)}>
+				onClick={() => navigate(`${basePath}/employees/${id}`)}>
 					View
 			</button>
 			{ deleteable ? 

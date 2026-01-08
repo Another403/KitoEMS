@@ -5,11 +5,15 @@ import DataTable from 'react-data-table-component';
 import { EmployeeButtons, EmployeeColumns } from '../../utils/EmployeeHelper';
 import { api } from '../../api.jsx';
 import ListSkeleton from '../skeletons/ListSkeleton.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths'
 
 const EmployeeList = () => {
 	const [searchText, setSearchText] = useState("");
 	const [employees, setEmployees] = useState([]);
 	const [employeesLoading, setEmployeesLoading] = useState(false);
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	const fetchEmployees = async () => {
 		setEmployeesLoading(true);
@@ -25,7 +29,7 @@ const EmployeeList = () => {
 					userRole: employee.userRole,
 					username: employee.userName,
 					email: employee.email,
-					actions: (<EmployeeButtons id={employee.id} deleteable={employee.userRole !== 'admin'} handleDelete={handleDelete}/>)
+					actions: (<EmployeeButtons id={employee.id} deleteable={employee.userRole !== 'admin'} handleDelete={handleDelete} basePath={basePath}/>)
 				}));
 				setEmployees(data);
 			}
@@ -64,7 +68,7 @@ const EmployeeList = () => {
 						onChange={(e) => setSearchText(e.target.value)}
 						className='px-4 py-0.5 border'>
 					</input>
-					<Link to="/admin-dashboard/add-employee" 
+					<Link to={`${basePath}/add-employee`}
 						className='px-4 py-1 bg-teal-600 rounded text-white'>
 							Add new employee
 					</Link>

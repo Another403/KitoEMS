@@ -208,6 +208,12 @@ const App = () => {
 				}>
 					<Route index element={<AdminSummary/>}></Route>
 
+					{/* Employees */}
+					<Route path="/hr-manager-dashboard/employees" element={<EmployeeList/>}></Route>
+					<Route path="/hr-manager-dashboard/employees/:id" element={<ViewEmployee/>}></Route>
+					<Route path="/hr-manager-dashboard/employees/edit/:id" element={<EditEmployee/>}></Route>
+					<Route path="/hr-manager-dashboard/add-employee" element={<AddEmployee/>}></Route>
+
 					{/* AdminLeaves */}
 					<Route path="/hr-manager-dashboard/leaves" element={<AdminLeavesList/>}></Route>
 					<Route path="/hr-manager-dashboard/leaves/add" element={<AdminAddLeave/>}></Route>

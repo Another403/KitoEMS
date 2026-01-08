@@ -50,7 +50,7 @@ const StorageManagerSidebar = () => {
 					}
 				>
 					<FaCalendarTimes />
-					<span>Employee Leaves</span>
+					<span>Leaves</span>
 				</NavLink>
 				<NavLink
 					to="/storage-manager-dashboard/payrolls"

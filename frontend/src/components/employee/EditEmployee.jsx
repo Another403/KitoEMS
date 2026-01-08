@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import { api } from '../../api.jsx';
+import { useAuth } from '../../contexts/AuthContext.jsx';
+import { getDashboardBasePath } from '../../utils/dashboardPaths'
 
 const EditEmployee = () => {
 	const { id } = useParams();
@@ -15,6 +17,8 @@ const EditEmployee = () => {
 		UserRole: ''
 	});
 	const navigate = useNavigate();
+	const { user } = useAuth();
+	const basePath = getDashboardBasePath(user?.userRole);
 
 	useEffect(() => {
 		const fetchEmployee = async () => {
@@ -75,7 +79,7 @@ const EditEmployee = () => {
 			);
 
 			if (res.status === 200) {
-				navigate('/admin-dashboard/employees');
+				navigate(`${basePath}/employees`);
 			}
 		} catch (error) {
 			console.log(error);
@@ -182,7 +186,7 @@ const EditEmployee = () => {
 					</button>
 					<button type="submit"
 						className='w-full mt-6 bg-red-600 hover:bg-red-700 hover:cursor-pointer text-white font-bold py-2 px-4 rounded'
-						onClick={() => navigate('/admin-dashboard/employees')}>
+						onClick={() => navigate(`${basePath}/employees`)}>
 							Cancel
 					</button>
 				</form>
