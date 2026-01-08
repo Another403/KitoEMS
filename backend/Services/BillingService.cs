@@ -55,21 +55,7 @@ public class BillingService
 
 		return query;
 	}
-	private IQueryable<Return> BuildReturnQuery(DateTime? from, DateTime? to)
-	{
-		var query = _context.Returns
-			.Include(r => r.Receipt)
-			.ThenInclude(r => r.Employee)
-			.AsQueryable();
-
-		if (from.HasValue)
-			query = query.Where(r => r.ReturnDate >= from.Value);
-		if (to.HasValue)
-			query = query.Where(r => r.ReturnDate <= to.Value);
-
-		return query;
-	}
-
+	
 	public void CalculateReceipt(Receipt receipt)
 	{
 		receipt.Total = receipt.Items.Sum(i => i.Quantity * i.UnitPrice);
@@ -138,11 +124,7 @@ public class BillingService
 		var receipts = await BuildReceiptQuery(from, to)
 			.Where(r => r.EmployeeId == EmployeeId)
 			.ToListAsync();
-		var returns = await BuildReturnQuery(from, to)
-			.Where(r => r.Receipt != null && r.Receipt.EmployeeId == EmployeeId)
-			.ToListAsync();
-
-		decimal totalAmount = receipts.Sum(b => b.Total) - returns.Sum(r => r.TotalRefund);
+		decimal totalAmount = receipts.Sum(b => b.Total);
 		decimal bonus = totalAmount * _commissionRate;
 		int booksSold = receipts
 			.SelectMany(r => r.Items)
@@ -200,11 +182,6 @@ public class BillingService
 	public async Task<List<EmployeeRevenueReportItem>> GetTopEmployeesAsync(DateTime? from, DateTime? to, int limit = 10)
 	{
 		var receipts = await BuildReceiptQuery(from, to).ToListAsync();
-		var returns = await BuildReturnQuery(from, to).ToListAsync();
-		var returnTotals = returns
-			.Where(r => r.Receipt != null)
-			.GroupBy(r => r.Receipt!.EmployeeId)
-			.ToDictionary(g => g.Key, g => g.Sum(r => r.TotalRefund));
 
 		return receipts
 			.GroupBy(r => new
@@ -218,7 +195,7 @@ public class BillingService
 			{
 				EmployeeId = g.Key.EmployeeId,
 				FullName = g.Key.Name,
-				Revenue = g.Sum(r => r.Total) - (returnTotals.TryGetValue(g.Key.EmployeeId, out var refunds) ? refunds : 0m),
+				Revenue = g.Sum(r => r.Total),
 				ReceiptCount = g.Count()
 			})
 			.OrderByDescending(e => e.Revenue)
